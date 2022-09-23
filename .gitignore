@@ -1,2 +1,5 @@
 # TODO
 brainstorm.txt
+
+# ignore those pesky bytecode files 
+*.pyc
