@@ -11,6 +11,15 @@ Assignment #1 - Problem #5) Nim Player
 The goal of this problem is to take an initial board state for a nim game (c1, c2, ..., cn) and generate 
 one or all of the possible best plays that would help the player win the game. 
 
+We can think of this by taking the initial board state and examining every possible first move and 
+determining whether or not that move places the player into an N position or a P position. If the move
+places the player into a P position, then that's a winning move so we log it. If not, then we pass and 
+move on. 
+
+Note that, depending on the size of the initial board, there could be thousands or millions of winning 
+moves. In order to avoid over logging, a limit of 100 possible moves has been applied. This limit can 
+be increased or removed for testing by TAs if need be. 
+
 This script can be run at the command line by running the following: $ python3 nim_player.py
 """
 
@@ -19,10 +28,10 @@ import numpy as np
 import re
 
 # local imports 
-from nim_setup import NimGame
+from nim_setup import NimGame, WINNING_MOVE_LIMIT
 
 # choose the board we want to solve: 
-nim_board: tuple = NimGame.board_3
+nim_board: tuple = NimGame.board_2
 
 
 def nim_sum(input: tuple) -> int:
@@ -75,15 +84,31 @@ def nim_sum(input: tuple) -> int:
     return nim_sum_int
 
 
+def nim_game(): 
+    """
+    Here we iterate through all the possible moves and see which of these moves give us P positions. 
+    """
+
+    # first we iterate through each of the (n) piles 
+    win_move_limit = 0
+    for i in range(len(nim_board)): 
+        # then we iterate through each of the chips in each pile
+        for j in range(nim_board[i]): 
+            aux_nim_board = nim_board.copy()
+            aux_nim_board[i] = aux_nim_board[i] - (j+1) 
+
+            # we can now get the nim sum of the new board 
+            ns = nim_sum(input=aux_nim_board)
+
+            # here we log the move if it places us into a p-position
+            if (ns == 0) & (win_move_limit < WINNING_MOVE_LIMIT): 
+                solution = [0] * len(nim_board)
+                solution[i] = solution[i] - (j+1)
+                print(f'The following move places us in a P position: {solution}')
+
 def main():
     print(f'Solving the following Nim Game board: {nim_board}')
-
-    ns = nim_sum(input=nim_board)
-
-    if ns == 0: 
-        print('We are in a P position!')
-    else:
-        print('We are in an N position!')
+    nim_game()
 
 if __name__ == "__main__":
     main()
