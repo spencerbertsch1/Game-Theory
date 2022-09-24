@@ -1,8 +1,8 @@
 # Assignment #1
 
-ENGG 199.09, Game Theory 
-Fall 2022, Dartmouth College
-Spencer Bertsch 
+ENGG 199.09, Game Theory  
+Fall 2022, Dartmouth College  
+Spencer Bertsch   
 
 ## To run the code: 
 
@@ -13,7 +13,7 @@ In order to run any of the test scripts in this repository, you will need python
       1. `$ conda create -n game_theory_env python=3.9`
    2. Then activate the new environment by running the following command:
        1. `$ conda activate game_theory_env`
-   3. Then process to the following step. 
+   3. Then proceed to the following step. 
    
 
 2. `cd` to the assignment_1 directory by running the following command:
@@ -24,7 +24,13 @@ In order to run any of the test scripts in this repository, you will need python
 
 2. If you would like, update the board that will be used in the nim_game by modifying line 109 of the `nim_player.py` file. Then run the following command to run the nim_player.py file: `$ python3 nim_player.py`
 
-3. You will see the output of each algorithm after running each of the python files.
+3. You will see the all the moves that place the user into a P position. Output will look as follows: 
+```
+Solving the following Nim Game board: [5, 12, 13]
+The following move places us in a P position: [-4, 0, 0]
+The following move places us in a P position: [0, -4, 0]
+The following move places us in a P position: [0, 0, -4]
+```
 
 ## How to run Question 6: G Function Calculator
 
