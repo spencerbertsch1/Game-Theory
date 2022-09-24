@@ -62,3 +62,23 @@ Here in example run from a directed acyclic graph that we discussed in class:
  ```
 
  As discussed in class, we can see that x is a P position iff x%4 = 0. 
+
+ Just to ensure this code is working properly, I also tested it on a larger graph that still represents a 
+ subtraction game with a subtraction set of s = {1, 2, 3}, but this time there are eleven vertices: 
+
+ <p align="center">
+    <img src="https://github.com/spencerbertsch1/Game-Theory/blob/main/assignment_1/diagrams/big_graph.png?raw=true" alt="big graph" width="40%"/>
+</p>
+
+The output can be seen below: 
+
+```
+Calculating the g-values and P/N states for each vertex of the following graph: 
+ {0: [], 1: [0], 2: [1, 0], 3: [2, 1, 0], 4: [3, 2, 1], 5: [4, 3, 2], 6: [5, 4, 3], 7: [6, 5, 4], 8: [7, 6, 5], 9: [8, 7, 6], 10: [9, 8, 7]} 
+ Solution:
+[['   x' '0' '1' '2' '3' '4' '5' '6' '7' '8' '9' '10']
+ ['g(x)' '0' '1' '2' '3' '0' '1' '2' '3' '0' '1' '2']
+ [' P/N' 'P' 'N' 'N' 'N' 'P' 'N' 'N' 'N' 'P' 'N' 'N']]
+```
+
+As expected, again we see that x is a P position iff x%4 = 0. 
