@@ -35,9 +35,13 @@ The following move places us in a P position: [0, 0, -4]
 
 ## How to run Question 6: G Function Calculator
 
-1. 
+1. Before running the G Function Calculator script, feel free to add a custom directed acyclic graph to the g_function_setup.py file under the `assignment_1` directory. Or you can use one of the existing graphs if you like.  
+
+2. If you would like, update the graph that will be used in the by modifying line 111 of the `g_function_calculator.py` file. Then run the following command to run the g_function_calculator.py file: 
+    1. `$ python3 g_function_calculator.py`
 
 3. You should see the solution printed with the following information: 
+ - The graph represented as a python dictionary 
  - The vertex (x)
  - The g-value g(x)
  - The P/N value of that vertex
@@ -53,4 +57,4 @@ Here in example run from a directed acyclic graph that we discussed in class:
  [' P/N' 'P' 'N' 'N' 'N' 'P' 'N']]
  ```
 
- As discussed in class, we can see that $$x$$ is a P position iff x%4 = 0. 
+ As discussed in class, we can see that $x$ is a P position iff x%4 = 0. 
