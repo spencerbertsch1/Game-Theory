@@ -22,7 +22,8 @@ In order to run any of the test scripts in this repository, you will need python
 ## How to run Question 5: Nim Player
 1. Before running the Nim Player script, feel free to add a custom nim_board to the nim_setup.py file under the `assignment_1` directory. You can use existing game boards or add your own. 
 
-2. If you would like, update the board that will be used in the nim_game by modifying line 109 of the `nim_player.py` file. Then run the following command to run the nim_player.py file: `$ python3 nim_player.py`
+2. If you would like, update the board that will be used in the nim_game by modifying line 109 of the `nim_player.py` file. Then run the following command to run the nim_player.py file: 
+    1. `$ python3 nim_player.py`
 
 3. You will see the all the moves that place the user into a P position. Output will look as follows: 
 ```
