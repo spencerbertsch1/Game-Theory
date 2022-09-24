@@ -57,4 +57,4 @@ Here in example run from a directed acyclic graph that we discussed in class:
  [' P/N' 'P' 'N' 'N' 'N' 'P' 'N']]
  ```
 
- As discussed in class, we can see that $x$ is a P position iff x%4 = 0. 
+ As discussed in class, we can see that x is a P position iff x%4 = 0. 
