@@ -1,4 +1,4 @@
-# Assignment #1
+# Assignment #1: Combinatorial and Graph Games
 
 ENGG 199.09, Game Theory  
 Fall 2022, Dartmouth College  
@@ -47,6 +47,10 @@ The following move places us in a P position: [0, 0, -4]
  - The P/N value of that vertex
 
 Here in example run from a directed acyclic graph that we discussed in class: 
+
+<p align="center">
+    <img src="https://github.com/spencerbertsch1/Game-Theory/blob/main/assignment_1/diagrams/small_graph.png?raw=true" alt="small graph" width="40%"/>
+</p>
 
 ```
  Calculating the g-values and P/N states for each vertex of the following graph: 
