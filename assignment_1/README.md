@@ -36,3 +36,21 @@ The following move places us in a P position: [0, 0, -4]
 ## How to run Question 6: G Function Calculator
 
 1. 
+
+3. You should see the solution printed with the following information: 
+ - The vertex (x)
+ - The g-value g(x)
+ - The P/N value of that vertex
+
+Here in example run from a directed acyclic graph that we discussed in class: 
+
+```
+ Calculating the g-values and P/N states for each vertex of the following graph: 
+ {0: [], 1: [0], 2: [1, 0], 3: [2, 1, 0], 4: [3, 2, 1], 5: [4, 3, 2]} 
+ Solution:
+[['   x' '0' '1' '2' '3' '4' '5']
+ ['g(x)' '0' '1' '2' '3' '0' '1']
+ [' P/N' 'P' 'N' 'N' 'N' 'P' 'N']]
+ ```
+
+ As discussed in class, we can see that $$x$$ is a P position iff x%4 = 0. 
