@@ -30,9 +30,6 @@ import re
 # local imports 
 from nim_setup import NimGame, WINNING_MOVE_LIMIT
 
-# choose the board we want to solve: 
-nim_board: tuple = NimGame.board_2
-
 
 def nim_sum(input: tuple) -> int:
     """
@@ -107,6 +104,10 @@ def nim_game():
                 print(f'The following move places us in a P position: {solution}')
 
 def main():
+    # choose the board we want to solve: 
+    global nim_board
+    nim_board = NimGame.board_2
+
     print(f'Solving the following Nim Game board: {nim_board}')
     nim_game()
 
