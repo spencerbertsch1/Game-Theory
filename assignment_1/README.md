@@ -67,7 +67,7 @@ Here in example run from a directed acyclic graph that we discussed in class:
  subtraction game with a subtraction set of s = {1, 2, 3}, but this time there are eleven vertices: 
 
  <p align="center">
-    <img src="https://github.com/spencerbertsch1/Game-Theory/blob/main/assignment_1/diagrams/big_graph.png?raw=true" alt="big graph" width="40%"/>
+    <img src="https://github.com/spencerbertsch1/Game-Theory/blob/main/assignment_1/diagrams/big_graph.png?raw=true" alt="big graph" width="60%"/>
 </p>
 
 The output can be seen below: 
