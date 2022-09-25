@@ -108,7 +108,7 @@ def g_func_calc(vertex: int):
 def main():
     # choose the graph we want to use: 
     global graph
-    graph = Graphs.graph1
+    graph = Graphs.graph3
 
     print(f'Calculating the g-values and P/N states for each vertex of the following graph: \n {graph} \n Solution:')
     graph_g_func_calc()
