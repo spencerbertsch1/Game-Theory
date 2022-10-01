@@ -35,10 +35,22 @@ def print_if_odd(l: list) -> list:
             odds.append(element)
     print(odds)
 
+def list_sorting(l: list):
+    l.sort(key = lambda x: len(x))
+    print(l)
 
+def dict_sorting(d: dict):
+    sorted_dict = dict(sorted(d.items(), key = lambda x : len(x[1])))
+    print(sorted_dict)
+
+def mean_value_sorting(d: dict):
+    sorted_dict = dict(sorted(d.items(), key = lambda x : sum(x[1])/len(x[1])))
+    print(sorted_dict)
 
 
 if __name__ == "__main__":
     # even_if_not_all_all_if_odd()
 
-    print_if_odd(l=[1, 2, 3, 4, 5, 6, 7])
+    d = {'red': [1, 2, 3], 'green': [0], 'blue': [300, 200], 'purple': [7, 8, 9]}
+    mean_value_sorting(d=d)
+    # {'green': [0], 'red': [1, 2, 3], 'purple': [7, 8, 9], 'blue': [300, 200]}
