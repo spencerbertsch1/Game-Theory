@@ -1,24 +1,41 @@
 import math
 
-def subtraction_game():
-    l = [0,1]  # <-- add list of repeating terms here
-    for i in range(101):
-        idx = i % len(l)
-        print(f'x={i}, g(x)={l[idx]}')
+from nim_player import nim_sum
 
-def at_least_half():
+def subtraction_game(x):
+    return x % 2
+    # l = [0,1]  # <-- add list of repeating terms here
+    # for i in range(101):
+    #     idx = i % len(l)
+    #     print(f'x={i}, g(x)={l[idx]}')
+
+def at_least_half(x):
+    return math.floor(math.log(x, 2)) + 1
+    # for x in range(1, 101, 1):
+    #     g_x = math.floor(math.log(x, 2)) + 1
+    #     print(f'x={x}, g(x)={g_x}')
+
+def even_if_not_all_all_if_odd(x):
+    if x%2==0:
+        g_x = (x/2) - 1
+    else:
+        g_x = (x+1)/2
+    return g_x
+    # for x in range(1, 101, 1):
+    #     if x%2==0:
+    #         g_x = (x/2) - 1
+    #     else:
+    #         g_x = (x+1)/2
+    #     # print(f'x={x}, g(x)={g_x}')
+
+def multi_game():
     for x in range(1, 101, 1):
-        g_x = math.floor(math.log(x, 2)) + 1
+        gx_1 = at_least_half(100)
+        gx_2 = even_if_not_all_all_if_odd(x)
+        gx_3 = subtraction_game(100)
+        input_tuple = (int(gx_1), int(gx_2), int(gx_3))
+        g_x = nim_sum(input_tuple)
         print(f'x={x}, g(x)={g_x}')
-
-def even_if_not_all_all_if_odd():
-    for x in range(1, 101, 1):
-        if x%2==0:
-            g_x = (x/2) - 1
-        else:
-            g_x = (x+1)/2
-        print(f'x={x}, g(x)={g_x}')
-
 
 def print_if_odd(l: list) -> list:
 
@@ -49,8 +66,4 @@ def mean_value_sorting(d: dict):
 
 
 if __name__ == "__main__":
-    # even_if_not_all_all_if_odd()
-
-    d = {'red': [1, 2, 3], 'green': [0], 'blue': [300, 200], 'purple': [7, 8, 9]}
-    mean_value_sorting(d=d)
-    # {'green': [0], 'red': [1, 2, 3], 'purple': [7, 8, 9], 'blue': [300, 200]}
+    multi_game()
