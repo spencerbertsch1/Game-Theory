@@ -106,7 +106,7 @@ def nim_game():
 def main():
     # choose the board we want to solve: 
     global nim_board
-    nim_board = NimGame.board_2
+    nim_board = NimGame.board_6
 
     print(f'Solving the following Nim Game board: {nim_board}')
     nim_game()
