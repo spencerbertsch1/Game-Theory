@@ -35,4 +35,10 @@ class PayoffMatrices():
     mat5 = np.array([[2, 0], [1, 2], [4, 1]])
 
     # define a singular (non-invertible) matrix used to trick method 6
-    mat6 = np.array([[1, 0, 0], [0, 1, 0], [0, 0, 0]])
+    mat6 = np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]])
+
+    # add a matrix where v=0 to test method 6
+    mat7 = np.array([[0, 1, -2], [1, -2, 3], [-2, 3, -4]])
+
+    # another matrix to test method 6
+    mat8 = np.array([[1, 7, 3], [13, 5, 6], [7, 8, 9]])
