@@ -39,8 +39,10 @@ class ZeroSum():
         method = solution_dict["method"]
         for k, v in solution_dict.items():
             if k != "method":
-                if type(v) == 'float':
+                if isinstance(v, float):
                     v_round = round(v, 2)
+                elif isinstance(v, int):
+                    v_round = v
                 else:
                     v_round = v.round(2)  # <-- used for np arrays
                 print(f'{method} {s} {k}: {v_round} {s}')
@@ -94,7 +96,7 @@ class ZeroSum():
         if (self.VERBOSE) & (v is not np.nan):
             self.pretty_print_solution(solution_dict={"p": p, "q": q, "v": v, "method": "Method 1 - Saddle Points"})
         elif (self.VERBOSE) & (v is np.nan):
-            print('Method 1 complete... No saddle point found.')
+            print('Method 1 complete. No saddle point found. Passing...')
 
         return {"p": p, "q": q, "v": v, "solved": solved}
 
@@ -132,7 +134,7 @@ class ZeroSum():
 
                 return {"p": p, "q": q, "v": v, "solved": True}
         else:
-            print("Method 2 can only be used on 2x2 matrices... Passing")
+            print("Method 2 can only be used on 2x2 matrices. Passing...")
         
 
     def dominant_recursion(self, input_matrix: np.array):
@@ -166,12 +168,12 @@ class ZeroSum():
 
                 # remove columns that are totally dominated by other columns
                 if len(greater_list) == input_matrix.shape[0]:
-                    print(f'Dominant strategy found! We can now remove column {col_combo[1]} from the matrix and continue.')
+                    # print(f'Dominant strategy found! We can now remove column {col_combo[1]} from the matrix and continue.')
                     if input_matrix.shape[1]>2:  # <-- we don't want to reduce to a single column here 
                         reduced_matrix = np.delete(input_matrix, (col_combo[1]), axis=1)
 
                 elif len(fewer_list) == input_matrix.shape[0]:
-                    print(f'Dominant strategy found! We can now remove column {col_combo[0]} from the matrix and continue.')
+                    # print(f'Dominant strategy found! We can now remove column {col_combo[0]} from the matrix and continue.')
                     if input_matrix.shape[1]>2:  # <-- we don't want to reduce to a single column here 
                         reduced_matrix = np.delete(input_matrix, (col_combo[0]), axis=1)
 
@@ -186,12 +188,12 @@ class ZeroSum():
 
                 # remove rows that are totally dominated by other rows
                 if len(greater_list) == input_matrix.shape[1]:
-                    print(f'Dominant strategy found! We can now remove row {row_combo[1]} from the matrix and continue.')
+                    # print(f'Dominant strategy found! We can now remove row {row_combo[1]} from the matrix and continue.')
                     if input_matrix.shape[0]>2:  # <-- we don't want to reduce to a single row here 
                         reduced_matrix = np.delete(input_matrix, (row_combo[1]), axis=0)
 
                 elif len(fewer_list) == input_matrix.shape[1]:
-                    print(f'Dominant strategy found! We can now remove row {row_combo[0]} from the matrix and continue.')
+                    # print(f'Dominant strategy found! We can now remove row {row_combo[0]} from the matrix and continue.')
                     if input_matrix.shape[0]>2:  # <-- we don't want to reduce to a single row here 
                         reduced_matrix = np.delete(input_matrix, (row_combo[0]), axis=0)
 
@@ -256,9 +258,29 @@ class ZeroSum():
 
                 return {"p": p, "q": q, "v": v, "solved": True}
 
+    def method_seven(self, A: np.array):
+        """
+        Use the simplex algorithm to generate the solution
+
+        SOURCES - I found several sources very helpful in understanding the simplex algorithm, mostly wikipedia
+        1. https://en.wikipedia.org/wiki/Simplex_algorithm
+
+        :param: A - np.array representing the input matrix
+        :return: dict - dictionary containing the equilibrium strategies and the value of the game 
+        """
+        # Step 1: Write matrix in Tableau form
+        right_col = np.array([np.ones(A.shape[0])])
+        A_with_col = np.concatenate((A, right_col.T), axis=1)
+        bottom_row = np.array([np.ones(A.shape[1]+1)])*-1
+        A_tableau = np.concatenate((A_with_col, bottom_row), axis=0)
+        A_tableau[-1][-1] = 0
+
+        print(A_tableau)
+
+        # Step 2: Find the pivot 
+        # TODO
 
 
-            
 
 def main():
     """
@@ -270,7 +292,7 @@ def main():
     """
     # define the parameters we will use 
     VERBOSE = True  # <-- set to true if you want all the output printed to the console 
-    mat = PayoffMatrices.mat3
+    mat = PayoffMatrices.A_v
 
     # create a 2 player zero sum game instance 
     game = ZeroSum(payoff_matrix=mat, VERBOSE=VERBOSE)
@@ -284,9 +306,14 @@ def main():
     # --- METHOD #3: Recursive Reduction using Dominant Strategies --- 
     # game.method_three(A=mat)
 
+    # --- METHOD #4: n x 2 or 2 x n --- 
+    # game.method_four(A=mat)
+
     # --- METHOD #6: Formula for non-degenerate n x n
     game.method_six(A=mat)
 
+    # --- METHOD #7: Simplex
+    game.method_seven(A=mat)
 
 
 if __name__ == "__main__":
