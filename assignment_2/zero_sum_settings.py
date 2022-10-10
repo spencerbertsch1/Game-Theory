@@ -42,3 +42,10 @@ class PayoffMatrices():
 
     # another matrix to test method 6
     mat8 = np.array([[1, 7, 3], [13, 5, 6], [7, 8, 9]])
+
+    # ---------- EXAMPLES FROM THE ASSIGNMENT -----------
+    A_i = np.array([[1, 2, 3, 4, 5], [3, 4, 5, 6, 7]])
+    A_ii = np.array([[1, -2, 3, 4], [0, 1, -2, 3], [0, 0, 1, -2], [0, 0, 0, 1]])
+    A_iii = np.array([[1, 2, -1], [2, -1, 4], [-1, 4, -3]])
+    A_iv = np.array([[0, 2, 1], [-2, 0, -4], [-1, 4, 0]])
+    A_v = np.array([[10, 0, 7, 0], [0, 6, 4, 0], [0, 0, 3, 3]])
