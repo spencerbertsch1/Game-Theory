@@ -20,10 +20,19 @@ import numpy as np
 
 class PayoffMatrices():
     # define a simple example payoff matrix
-    mat1 = np.array([[1, 2], [3, 4]])
+    mat1 = np.array([[9, 2], [3, 5]])
 
     # define a non 2x2 matrix
     mat2 = np.array([[2, 3, 1, 5], [4, 1, 6, 0]])
 
     # define a matrix with a single saddle point
     mat3 = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+
+    # define 2x2 matrix with a saddle point
+    mat4 = np.array([[1, 2], [3, 4]])
+
+    # define a matrix that we can pair down to a 2x2 using dominant strategies
+    mat5 = np.array([[2, 0], [1, 2], [4, 1]])
+
+    # define a singular (non-invertible) matrix used to trick method 6
+    mat6 = np.array([[1, 0, 0], [0, 1, 0], [0, 0, 0]])
