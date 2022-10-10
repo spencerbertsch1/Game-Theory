@@ -39,7 +39,11 @@ class ZeroSum():
         method = solution_dict["method"]
         for k, v in solution_dict.items():
             if k != "method":
-                print(f'{method} {s} {k}: {round(v, 2)} {s}')
+                if type(v) == 'float':
+                    v_round = round(v, 2)
+                else:
+                    v_round = v.round(2)  # <-- used for np arrays
+                print(f'{method} {s} {k}: {v_round} {s}')
 
     @staticmethod
     def comb_generator(i: int):
@@ -101,32 +105,34 @@ class ZeroSum():
         :return: dict - dictionary containing the equilibrium strategies and the value of the game 
         """
 
-        assert ((A.shape[0] == 2) & (A.shape[1]==2)), "Method 2 can only be used on 2x2 matrices!"
+        if ((A.shape[0] == 2) & (A.shape[1]==2)): 
 
-        # test for saddle points
-        d = self.method_one(A=A)
-        if d['solved'] is True:
-            print('Method 2 should not be used - this payoff matrix has a saddle point! Using Method 1 instead.')
-            self.pretty_print_solution(solution_dict={"p": d['p'], "q": d['q'], "v": d['v'], "method": "Method 1 - Saddle Points"})
+            # test for saddle points
+            d = self.method_one(A=A)
+            if d['solved'] is True:
+                print('Method 2 should not be used - this payoff matrix has a saddle point! Using Method 1 instead.')
+                self.pretty_print_solution(solution_dict={"p": d['p'], "q": d['q'], "v": d['v'], "method": "Method 1 - Saddle Points"})
+            else:
+
+                # define each element of the 2x2 matrix
+                a = A[0][0]
+                b = A[0][1]
+                c = A[1][1]
+                d = A[1][0]
+
+                # use the formulas from class to define the optimal strategies
+                p = (c-d)/((a-b) + (c-d))
+                q = (c-b)/((a-b) + (c-d))
+                det_A = np.linalg.det(A)
+                v = det_A/((a-b) + (c-d))
+
+                # print the solution
+                if self.VERBOSE:
+                    self.pretty_print_solution(solution_dict={"p": p, "q": q, "v": v, "method": "Method 2 - 2x2 Formulas"})
+
+                return {"p": p, "q": q, "v": v, "solved": True}
         else:
-
-            # define each element of the 2x2 matrix
-            a = A[0][0]
-            b = A[0][1]
-            c = A[1][1]
-            d = A[1][0]
-
-            # use the formulas from class to define the optimal strategies
-            p = (c-d)/((a-b) + (c-d))
-            q = (c-b)/((a-b) + (c-d))
-            det_A = np.linalg.det(A)
-            v = det_A/((a-b) + (c-d))
-
-            # print the solution
-            if self.VERBOSE:
-                self.pretty_print_solution(solution_dict={"p": p, "q": q, "v": v, "method": "Method 2 - 2x2 Formulas"})
-
-            return {"p": p, "q": q, "v": v, "solved": True}
+            print("Method 2 can only be used on 2x2 matrices... Passing")
         
 
     def dominant_recursion(self, input_matrix: np.array):
@@ -226,7 +232,32 @@ class ZeroSum():
             print(f'The input matrix is singular (non-invertible), so method 6 cannot be used. Passing...')
         else:
             # here we know that our matrix is nonsingular, so we can move forward with the computation
-            pass
+            # Step 1: Calculate v
+            a_inv = inv(A)
+            n = A.shape[0]
+            ones = np.ones(n)
+            v_denom = np.dot(np.dot(ones.T, a_inv), ones)
+            v = 1 / v_denom
+            
+            # call the same function with a matrix incremented by 1
+            if v < 0.0001:
+                return self.method_six(A=(A+1))
+            
+            else:
+                # Calculate p
+                p = v * (np.dot(ones.T, a_inv))
+
+                # Calculate v
+                q = v * (np.dot(a_inv, ones))
+                
+                # print the solution
+                if self.VERBOSE:
+                    self.pretty_print_solution(solution_dict={"p": p, "q": q, "v": v, "method": "Method 6 - Formula for non-degenerate n x n"})
+
+                return {"p": p, "q": q, "v": v, "solved": True}
+
+
+
             
 
 def main():
@@ -239,7 +270,7 @@ def main():
     """
     # define the parameters we will use 
     VERBOSE = True  # <-- set to true if you want all the output printed to the console 
-    mat = PayoffMatrices.mat6
+    mat = PayoffMatrices.mat3
 
     # create a 2 player zero sum game instance 
     game = ZeroSum(payoff_matrix=mat, VERBOSE=VERBOSE)
@@ -248,7 +279,7 @@ def main():
     game.method_one(A=mat)
 
     # --- METHOD #2: Use the 2 x 2 matrix formula --- 
-    # game.method_two(A=mat)
+    game.method_two(A=mat)
 
     # --- METHOD #3: Recursive Reduction using Dominant Strategies --- 
     # game.method_three(A=mat)
