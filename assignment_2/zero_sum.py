@@ -281,7 +281,6 @@ class ZeroSum():
         # TODO
 
 
-
 def main():
     """
     Create an instance of the 2 player zero sum game and attempt to solve the game and find
@@ -292,7 +291,7 @@ def main():
     """
     # define the parameters we will use 
     VERBOSE = True  # <-- set to true if you want all the output printed to the console 
-    mat = PayoffMatrices.A_v
+    mat = PayoffMatrices.mat1
 
     # create a 2 player zero sum game instance 
     game = ZeroSum(payoff_matrix=mat, VERBOSE=VERBOSE)
