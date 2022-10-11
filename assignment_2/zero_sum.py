@@ -29,6 +29,8 @@ class ZeroSum():
         self.payoff_matrix = payoff_matrix
         self.VERBOSE = VERBOSE
 
+        print(f'_____PAYOFF MATRIX_____ \n {self.payoff_matrix}')
+
     @staticmethod
     def pretty_print_solution(solution_dict: dict):
         """
@@ -72,33 +74,34 @@ class ZeroSum():
         :return: dict - dictionary containing the equilibrium strategies and the value of the game 
         """
         solved = False
+        if isinstance(A, bool):
+            print('something')
         # initialize the equilibrium strategies and also the value of the game 
-        p, q, v = np.nan, np.nan, np.nan
+        p, q, v = np.zeros(A.shape[0]), np.zeros(A.shape[1]), np.nan
 
         # find the row minimums and column maximums 
         row_min_vec: np.array = A.min(axis=1)
         col_max_vec: np.array = A.max(axis=0)
 
-        smaller_dim = min(A.shape[0], A.shape[1])
-
-        # find any saddle points and log them 
-        for i in range(smaller_dim):
-            for j in range(smaller_dim):
-                if row_min_vec[i] == col_max_vec[j]:
+        for i, row_min in enumerate(row_min_vec):
+            for j, col_max in enumerate(col_max_vec):
+                if row_min == col_max: 
                     # saddle point found 
                     v = row_min_vec[i]
-                    p = i+1
-                    q = j+1
-                    print(f'Saddle point found! p: {p}, q: {q}, game value: {v}')
+                    p[i] = 1
+                    q[j] = 1
+                    if self.VERBOSE:
+                        print(f'Saddle point found! p: {p}, q: {q}, game value: {v}')
                     solved = True
 
         # print the solution
-        if (self.VERBOSE) & (v is not np.nan):
+        if solved:
             self.pretty_print_solution(solution_dict={"p": p, "q": q, "v": v, "method": "Method 1 - Saddle Points"})
-        elif (self.VERBOSE) & (v is np.nan):
+        else:
             print('Method 1 complete. No saddle point found. Passing...')
 
         return {"p": p, "q": q, "v": v, "solved": solved}
+
 
     def method_two(self, A: np.array):
         """
@@ -107,14 +110,15 @@ class ZeroSum():
         :return: dict - dictionary containing the equilibrium strategies and the value of the game 
         """
 
-        if ((A.shape[0] == 2) & (A.shape[1]==2)): 
+        # test for saddle points
+        d = self.method_one(A=A)
+        if d['solved'] is True:
+            print('Method 2 should not be used - this payoff matrix has a saddle point! Using Method 1 instead.')
+            self.pretty_print_solution(solution_dict={"p": d['p'], "q": d['q'], "v": d['v'], "method": "Method 1 - Saddle Points"})
+        else:
 
-            # test for saddle points
-            d = self.method_one(A=A)
-            if d['solved'] is True:
-                print('Method 2 should not be used - this payoff matrix has a saddle point! Using Method 1 instead.')
-                self.pretty_print_solution(solution_dict={"p": d['p'], "q": d['q'], "v": d['v'], "method": "Method 1 - Saddle Points"})
-            else:
+            # method 2 can only ever be used on 2x2 matrices
+            if ((A.shape[0] == 2) & (A.shape[1]==2)): 
 
                 # define each element of the 2x2 matrix
                 a = A[0][0]
@@ -133,8 +137,9 @@ class ZeroSum():
                     self.pretty_print_solution(solution_dict={"p": p, "q": q, "v": v, "method": "Method 2 - 2x2 Formulas"})
 
                 return {"p": p, "q": q, "v": v, "solved": True}
-        else:
-            print("Method 2 can only be used on 2x2 matrices. Passing...")
+            
+            else:
+                print("Method 2 can only be used on 2x2 matrices. Passing...")
         
 
     def dominant_recursion(self, input_matrix: np.array):
@@ -146,6 +151,9 @@ class ZeroSum():
             1. break if we hit a point where there are NO dominant strategies and the matrix is still not reduced to 2x2
             2. sweep through all possible weights ((0.1, 0.9), (0.2, 0.8), ...) for the rows/columns to find dominant strategies
         """
+        if input_matrix is False:
+            return False
+
         # base case - there are no dominant strategies, or the matrix is a 2x2 and can be solved through other means
         if ((input_matrix.shape[0] == 2) & (input_matrix.shape[1]==2)):
             if self.VERBOSE:
@@ -156,6 +164,10 @@ class ZeroSum():
             # now we need to find the dominant strategy and remove the weak column or row
             column_combos: list = self.comb_generator(i=input_matrix.shape[1])
             row_combos: list = self.comb_generator(i=input_matrix.shape[0])
+
+            # add a check here to see if we need to break out of the recursion
+            # this occurs when the matrix is NOT 2x2, but no dominant strategies exist... 
+            dom_strategy = False
 
             # iterate over all column combinations
             for col_combo in column_combos:
@@ -168,14 +180,18 @@ class ZeroSum():
 
                 # remove columns that are totally dominated by other columns
                 if len(greater_list) == input_matrix.shape[0]:
-                    # print(f'Dominant strategy found! We can now remove column {col_combo[1]} from the matrix and continue.')
+                    if self.VERBOSE:
+                        print(f'Dominant strategy found! We can now remove column {col_combo[1]} from the matrix and continue.')
                     if input_matrix.shape[1]>2:  # <-- we don't want to reduce to a single column here 
                         reduced_matrix = np.delete(input_matrix, (col_combo[1]), axis=1)
+                        dom_strategy = True
 
                 elif len(fewer_list) == input_matrix.shape[0]:
-                    # print(f'Dominant strategy found! We can now remove column {col_combo[0]} from the matrix and continue.')
+                    if self.VERBOSE:
+                        print(f'Dominant strategy found! We can now remove column {col_combo[0]} from the matrix and continue.')
                     if input_matrix.shape[1]>2:  # <-- we don't want to reduce to a single column here 
                         reduced_matrix = np.delete(input_matrix, (col_combo[0]), axis=1)
+                        dom_strategy = True
 
             # iterate over all row combinations
             for row_combo in row_combos:
@@ -188,17 +204,25 @@ class ZeroSum():
 
                 # remove rows that are totally dominated by other rows
                 if len(greater_list) == input_matrix.shape[1]:
-                    # print(f'Dominant strategy found! We can now remove row {row_combo[1]} from the matrix and continue.')
+                    if self.VERBOSE:
+                        print(f'Dominant strategy found! We can now remove row {row_combo[1]} from the matrix and continue.')
                     if input_matrix.shape[0]>2:  # <-- we don't want to reduce to a single row here 
                         reduced_matrix = np.delete(input_matrix, (row_combo[1]), axis=0)
+                        dom_strategy = True
 
                 elif len(fewer_list) == input_matrix.shape[1]:
-                    # print(f'Dominant strategy found! We can now remove row {row_combo[0]} from the matrix and continue.')
+                    if self.VERBOSE:
+                        print(f'Dominant strategy found! We can now remove row {row_combo[0]} from the matrix and continue.')
                     if input_matrix.shape[0]>2:  # <-- we don't want to reduce to a single row here 
                         reduced_matrix = np.delete(input_matrix, (row_combo[0]), axis=0)
+                        dom_strategy = True
 
             # make the recursive call passing in the newly reduced matrix 
-            return self.dominant_recursion(input_matrix=reduced_matrix)
+            if dom_strategy:
+                return self.dominant_recursion(input_matrix=reduced_matrix)
+            else:
+                print(f'Method 3 has failed - there are no dominant strategies, but the payoff matrix is not 2 x 2. Passing...')
+                return False
 
 
     def method_three(self, A: np.array):
@@ -211,7 +235,10 @@ class ZeroSum():
         reduced_matrix = self.dominant_recursion(input_matrix=A)
 
         # Step 2: Use methods 1 or 2 to get the solution for the new 2x2 matrix
-        self.method_two(A=reduced_matrix)
+        if isinstance(reduced_matrix, bool):
+            pass
+        else:
+            self.method_two(A=reduced_matrix)
 
     def method_four(self, A: np.array):
         pass
@@ -225,38 +252,53 @@ class ZeroSum():
         :param: A - np.array representing the input matrix
         :return: dict - dictionary containing the equilibrium strategies and the value of the game 
         """
-        try: 
-            a_inv = inv(A)
-        except:
-            a_inv = np.nan
-
-        if a_inv is np.nan: 
-            print(f'The input matrix is singular (non-invertible), so method 6 cannot be used. Passing...')
+        # ensure the matrix is square! 
+        if A.shape[0] != A.shape[1]:
+            print(f'Method 6 can only be used on (n x n) matrices, not ({A.shape[0]} x {A.shape[1]}) matrices. Passing...')
         else:
-            # here we know that our matrix is nonsingular, so we can move forward with the computation
-            # Step 1: Calculate v
-            a_inv = inv(A)
-            n = A.shape[0]
-            ones = np.ones(n)
-            v_denom = np.dot(np.dot(ones.T, a_inv), ones)
-            v = 1 / v_denom
-            
-            # call the same function with a matrix incremented by 1
-            if v < 0.0001:
-                return self.method_six(A=(A+1))
-            
-            else:
-                # Calculate p
-                p = v * (np.dot(ones.T, a_inv))
 
-                # Calculate v
-                q = v * (np.dot(a_inv, ones))
+            # test for saddle points
+            d = self.method_one(A=A)
+            if (d['solved'] is True): 
+                print('Method 6 should not be used - this payoff matrix has a saddle point! Using Method 1 instead.')
+                self.pretty_print_solution(solution_dict={"p": d['p'], "q": d['q'], "v": d['v'], "method": "Method 1 - Saddle Points"})
+            else:
+                # now we know there are NO saddle points and the matrix is square so we can continue with Method 6
+                try: 
+                    a_inv = inv(A)
+                except:
+                    a_inv = np.nan
+
+                if a_inv is np.nan: 
+                    if self.VERBOSE:
+                        print(f'The input matrix is singular (non-invertible), so we need to modify the payoff matrix slightly and try again')
+                    # increment all values of A by 1 to produce a matrix that is NOT singular
+                    return self.method_six(A=(A+1))
+
+                # here we know that our matrix is nonsingular, so we can move forward with the computation
+                # Step 1: Calculate v
+                a_inv = inv(A)
+                n = A.shape[0]
+                ones = np.ones(n)
+                v_denom = np.dot(np.dot(ones.T, a_inv), ones)
+                v = 1 / v_denom
                 
-                # print the solution
-                if self.VERBOSE:
+                # call the same function with a matrix incremented by 1
+                if v < 0.0001:
+                    return self.method_six(A=(A+1))
+                
+                else:
+                    # Calculate p
+                    p = v * (np.dot(ones.T, a_inv))
+
+                    # Calculate v
+                    q = v * (np.dot(a_inv, ones))
+                    
+                    # print the solution
                     self.pretty_print_solution(solution_dict={"p": p, "q": q, "v": v, "method": "Method 6 - Formula for non-degenerate n x n"})
 
-                return {"p": p, "q": q, "v": v, "solved": True}
+                    return {"p": p, "q": q, "v": v, "solved": True}
+
 
     def method_seven(self, A: np.array):
         """
@@ -280,6 +322,9 @@ class ZeroSum():
         # Step 2: Find the pivot 
         # TODO
 
+        # Step 3: Perform the pivot 
+        
+
 
 def main():
     """
@@ -290,8 +335,8 @@ def main():
     :return: - NA
     """
     # define the parameters we will use 
-    VERBOSE = True  # <-- set to true if you want all the output printed to the console 
-    mat = PayoffMatrices.mat1
+    VERBOSE = False  # <-- set to true if you want all the output printed to the console 
+    mat = PayoffMatrices.A_i
 
     # create a 2 player zero sum game instance 
     game = ZeroSum(payoff_matrix=mat, VERBOSE=VERBOSE)
@@ -303,7 +348,7 @@ def main():
     game.method_two(A=mat)
 
     # --- METHOD #3: Recursive Reduction using Dominant Strategies --- 
-    # game.method_three(A=mat)
+    game.method_three(A=mat)
 
     # --- METHOD #4: n x 2 or 2 x n --- 
     # game.method_four(A=mat)
