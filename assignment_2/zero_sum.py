@@ -19,6 +19,7 @@ import statistics
 import numpy as np
 from itertools import combinations
 from numpy.linalg import inv
+from scipy.optimize import linprog
 
 # local imports 
 from zero_sum_settings import PayoffMatrices
@@ -147,9 +148,10 @@ class ZeroSum():
         Recursive function to reduce a matrix down by eliminating rows/columns that represent dominant strategies
 
         Here we are assuming that there will always be a dominant strategy for the input matrix... 
+
         TODOs: 
-            1. break if we hit a point where there are NO dominant strategies and the matrix is still not reduced to 2x2
-            2. sweep through all possible weights ((0.1, 0.9), (0.2, 0.8), ...) for the rows/columns to find dominant strategies
+            1. iterate through 3 column / 3 row combinations as well as 2 row / 2 col combinations
+            2. sweep through 10 possible weights ((0.1, 0.9), (0.2, 0.8), ...) for the rows/columns to find dominant strategies
         """
         if input_matrix is False:
             return False
@@ -221,7 +223,7 @@ class ZeroSum():
             if dom_strategy:
                 return self.dominant_recursion(input_matrix=reduced_matrix)
             else:
-                print(f'Method 3 has failed - there are no dominant strategies, but the payoff matrix is not 2 x 2. Passing...')
+                print(f'Method 3 has failed - there are no dominant strategies, but the payoff matrix is ({input_matrix.shape[0]} x {input_matrix.shape[1]}) not (2 x 2). Passing...')
                 return False
 
 
@@ -241,7 +243,26 @@ class ZeroSum():
             self.method_two(A=reduced_matrix)
 
     def method_four(self, A: np.array):
-        pass
+        """
+        Here we use the graphical approach to solve (2 x n) or (m x 2) games. 
+
+        :param: A - np.array representing the input matrix
+        :return: dict - dictionary containing the equilibrium strategies and the value of the game 
+        """
+        if (((A.shape[0] == 2) & (A.shape[1] != 2)) | ((A.shape[0] != 2) & (A.shape[1] == 2))):
+            
+            # first we deal with the case that there are two rows and n columns where n>2, so player 1 only has two options (p, 1-p)
+            if A.shape[0] == 2:
+                pass
+
+            # now we deal with the case that there are two columns and m rows where m>2, so player 2 only has two options (q, 1-q)
+            elif A.shape[0] == 2:
+                pass
+
+            else:
+                raise Exception('We should never get here - check the dimensions of the input matrix...')
+        else:
+            print (f'Method 4 can only be used on (n x 2) or (2 x m) matrices, not ({A.shape[0]} x {A.shape[1]}) matrices. Passing...')
 
     def method_five(self, A: np.array):
         pass
@@ -252,16 +273,17 @@ class ZeroSum():
         :param: A - np.array representing the input matrix
         :return: dict - dictionary containing the equilibrium strategies and the value of the game 
         """
-        # ensure the matrix is square! 
+        # CHECK: ensure the matrix is square
         if A.shape[0] != A.shape[1]:
             print(f'Method 6 can only be used on (n x n) matrices, not ({A.shape[0]} x {A.shape[1]}) matrices. Passing...')
         else:
 
-            # test for saddle points
+            # CHECK: test the matrix for saddle points
             d = self.method_one(A=A)
             if (d['solved'] is True): 
                 print('Method 6 should not be used - this payoff matrix has a saddle point! Using Method 1 instead.')
                 self.pretty_print_solution(solution_dict={"p": d['p'], "q": d['q'], "v": d['v'], "method": "Method 1 - Saddle Points"})
+            
             else:
                 # now we know there are NO saddle points and the matrix is square so we can continue with Method 6
                 try: 
@@ -269,22 +291,22 @@ class ZeroSum():
                 except:
                     a_inv = np.nan
 
+                # CHECK: if the matrix turns out to be singular, then we increment all values of A by 1 to produce a matrix that is NOT singular
                 if a_inv is np.nan: 
                     if self.VERBOSE:
                         print(f'The input matrix is singular (non-invertible), so we need to modify the payoff matrix slightly and try again')
-                    # increment all values of A by 1 to produce a matrix that is NOT singular
                     return self.method_six(A=(A+1))
 
                 # here we know that our matrix is nonsingular, so we can move forward with the computation
-                # Step 1: Calculate v
+                # Calculate v
                 a_inv = inv(A)
                 n = A.shape[0]
                 ones = np.ones(n)
                 v_denom = np.dot(np.dot(ones.T, a_inv), ones)
                 v = 1 / v_denom
                 
-                # call the same function with a matrix incremented by 1
-                if v < 0.0001:
+                # CHECK: if the matrx has a game value of zero, then we increment by 1 and run again
+                if v < 0.000001:
                     return self.method_six(A=(A+1))
                 
                 else:
@@ -323,7 +345,7 @@ class ZeroSum():
         # TODO
 
         # Step 3: Perform the pivot 
-        
+
 
 
 def main():
@@ -336,7 +358,7 @@ def main():
     """
     # define the parameters we will use 
     VERBOSE = False  # <-- set to true if you want all the output printed to the console 
-    mat = PayoffMatrices.A_i
+    mat = PayoffMatrices.A_ii
 
     # create a 2 player zero sum game instance 
     game = ZeroSum(payoff_matrix=mat, VERBOSE=VERBOSE)
