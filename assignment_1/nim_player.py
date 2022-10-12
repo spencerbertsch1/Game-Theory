@@ -112,4 +112,6 @@ def main():
     nim_game()
 
 if __name__ == "__main__":
-    main()
+    # main()
+
+    print(nim_sum((0,1,2,4,2,3,6)))
