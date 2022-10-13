@@ -55,7 +55,7 @@ The pattern is pretty clear to see. It repeats over intervals of 4 values - see 
     <img src="https://github.com/spencerbertsch1/Game-Theory/blob/main/assignment_2/diagrams/fig_1.png?raw=true" alt="big graph" width="85%"/>
 </p>
 
-Here is a code snipet that should work to generate g(x) for any input x: 
+Here is some pseudocode that shows the logic needed to generate g(x) for any input x: 
 
 ```
 if x==0:
@@ -77,4 +77,4 @@ x=4 --> g(x) = x-1 = 3
 ...
 ```
 
-And so on. We can see that the values of x=99 and x=100 are swapped, so these values represent index 3 and index 4 in our 4-length pattern. This makes sense because 100%4=0, so the pattern should begin again at x=101. 
+And so on. We can see above that the values of x=99 and x=100 are swapped, so these values represent index 3 and index 4 in our 4-length pattern. This makes sense because 100%4=0, so the pattern should begin again at x=101. 
