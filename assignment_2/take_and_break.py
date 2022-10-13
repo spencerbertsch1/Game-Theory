@@ -16,7 +16,20 @@ This script can be run at the command line by running the following: $ python3 t
 # imports
 import numpy as np
 import re
+import math
 
+def mex(input_set: set): 
+    """
+    Utility function that returns the smallest non-negative integer that is NOT contained 
+    in the input_set 
+
+    :param: set - input_set representing the values we pass to the mex() function
+    :return: int - integer representing the result of mex(s)
+    """
+    mex = 0
+    while mex in input_set:
+        mex += 1
+    return mex 
 
 def nim_sum(input: tuple) -> int:
     """
@@ -69,8 +82,29 @@ def nim_sum(input: tuple) -> int:
 
 
 def take_and_break_logic(x: int, g_x_dict: dict) -> int:
-    # TODO add the game logic here! 
-    return x*2
+    # this takes care of the previous solutions, now we just need to account for the other values
+    curr_nim_sum_list = [v for _, v in g_x_dict.items()]
+
+    # we only need to iterate through half of x since (x NIMSUM y) = (y NIMSUM x)
+    iter_x = math.floor(x/2)
+    for i in range(1, iter_x+1, 1):
+        # create pile 1
+        pile_1 = i
+        # create pile 2
+        pile_2 = x - i
+        
+        # get g-value for pile 1 and pile 2
+        g_pile_1 = g_x_dict[pile_1]
+        g_pile_2 = g_x_dict[pile_2]
+
+        # generate the new nim sum that we need to add to the complete list
+        nim_sum_to_add = nim_sum((g_pile_1, g_pile_2))
+
+        curr_nim_sum_list.append(nim_sum_to_add)
+
+    final_g_value = mex(tuple(curr_nim_sum_list))
+
+    return final_g_value 
 
 
 def main():
@@ -78,8 +112,9 @@ def main():
     for x in range(101):
         g_x = take_and_break_logic(x=x, g_x_dict=g_x_dict)
         g_x_dict[x] = g_x
-        print(f'x={x}, g(x)={g_x}')
+        print(f'g({x})={g_x}')
 
 
 if __name__ == "__main__":
     main()
+
