@@ -64,7 +64,7 @@ g(100)=99
  I'm not sure if there's a closed form solution here, but the pattern is clear to see: 
 
  <p align="center">
-    <img src="https://github.com/spencerbertsch1/Game-Theory/blob/main/assignment_2/diagrams/fig_1.png?raw=true" alt="big graph" width="60%"/>
+    <img src="https://github.com/spencerbertsch1/Game-Theory/blob/main/assignment_2/diagrams/fig_1.png?raw=true" alt="big graph" width="85%"/>
 </p>
 
 The pattern repeats over every interval of 4 values.
