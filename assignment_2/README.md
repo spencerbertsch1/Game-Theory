@@ -24,7 +24,7 @@ In order to run any of the test scripts in this repository, you will need python
 
 EDIT BELOW HERE
 
-## How to run Question 6: G Function Calculator
+## How to run Question 3 (a): Take and Break
 
 1. Before running the G Function Calculator script, feel free to add a custom directed acyclic graph to the g_function_setup.py file under the `assignment_2` directory. Or you can use one of the existing graphs if you like.  
 
@@ -32,24 +32,33 @@ EDIT BELOW HERE
     1. `$ python3 g_function_calculator.py`
 
 3. You should see the solution printed with the following information: 
- - The graph represented as a python dictionary 
- - The vertex (x)
- - The g-value g(x)
- - The P/N value of that vertex
+ - Each g(x) value printed between x=0 and x=100. 
 
-Here in example run from a directed acyclic graph that we discussed in class: 
-
-<p align="center">
-    <img src="https://github.com/spencerbertsch1/Game-Theory/blob/main/assignment_2/diagrams/small_graph.png?raw=true" alt="small graph" width="40%"/>
-</p>
 
 ```
- Calculating the g-values and P/N states for each vertex of the following graph: 
- {0: [], 1: [0], 2: [1, 0], 3: [2, 1, 0], 4: [3, 2, 1], 5: [4, 3, 2]} 
- Solution:
-[['   x' '0' '1' '2' '3' '4' '5']
- ['g(x)' '0' '1' '2' '3' '0' '1']
- [' P/N' 'P' 'N' 'N' 'N' 'P' 'N']]
+g(0)=0
+g(1)=1
+g(2)=2
+g(3)=4
+g(4)=3
+g(5)=5
+g(6)=6
+g(7)=8
+g(8)=7
+g(9)=9
+g(10)=10
+... 
+g(90)=90
+g(91)=92
+g(92)=91
+g(93)=93
+g(94)=94
+g(95)=96
+g(96)=95
+g(97)=97
+g(98)=98
+g(99)=100
+g(100)=99
  ```
 
  As discussed in class, we can see that x is a P position iff x%4 = 0. 
