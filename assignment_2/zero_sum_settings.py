@@ -43,6 +43,12 @@ class PayoffMatrices():
     # another matrix to test method 6
     mat8 = np.array([[1, 7, 3], [13, 5, 6], [7, 8, 9]])
 
+    # another matrix that's a good test for the simplex method 
+    mat9 = np.array([[4, 1, 8], [2, 3, 1], [0, 4, 3]])
+
+    # another matrix that's a good test for the simplex method 
+    mat10 = np.array([[2, -1, 6], [0, 1, -1], [-2, 2, 1]])
+
     # ---------- EXAMPLES FROM THE ASSIGNMENT -----------
     A_i = np.array([[1, 2, 3, 4, 5], [3, 4, 5, 6, 7]])
     A_ii = np.array([[1, -2, 3, 4], [0, 1, -2, 3], [0, 0, 1, -2], [0, 0, 0, 1]])
