@@ -76,7 +76,6 @@ class ZeroSum():
         :param: - NA
         :return: dict - dictionary containing the equilibrium strategies and the value of the game 
         """
-        print(A)
         solved = False
         if isinstance(A, bool):
             print('something')
@@ -98,9 +97,6 @@ class ZeroSum():
                         print(f'Saddle point found! p: {p}, q: {q}, game value: {v}')
                     solved = True
 
-        if len(p) == 2:
-            print('something')
-
         # print the solution
         if solved:
             self.pretty_print_solution(solution_dict={"p": p, "q": q, "v": v, "method": "Method 1 - Saddle Points"})
@@ -116,8 +112,6 @@ class ZeroSum():
         :param: - NA
         :return: dict - dictionary containing the equilibrium strategies and the value of the game 
         """
-        print('METHOD 2')
-
         # test for saddle points
         d = self.method_one(A=A)
         if d['solved'] is True:
@@ -140,11 +134,14 @@ class ZeroSum():
                 det_A = np.linalg.det(A)
                 v = det_A/((a-b) + (c-d))
 
-                # print the solution
-                if self.VERBOSE:
-                    self.pretty_print_solution(solution_dict={"p": p, "q": q, "v": v, "method": "Method 2 - 2x2 Formulas"})
+                # generate the solution vectors
+                p_vec = [p, 1-p]
+                q_vec = [q, 1-q]
 
-                return {"p": p, "q": q, "v": v, "solved": True}
+                # print the solution
+                self.pretty_print_solution(solution_dict={"p": p_vec, "q": q_vec, "v": v, "method": "Method 2 - 2x2 Formulas"})                  
+
+                return {"p": p_vec, "q": q_vec, "v": v, "solved": True}
             
             else:
                 print("Method 2 can only be used on 2x2 matrices. Passing...")
@@ -276,7 +273,7 @@ class ZeroSum():
     def method_five(self, A: np.array):
         pass
 
-    def method_six(self, A: np.array):
+    def method_six(self, A: np.array, counter: int = 0):
         """
         Here we use a formula to calculate p, q, and v as long as A is an invertible (non-degenerate) matrix. 
         :param: A - np.array representing the input matrix
@@ -304,7 +301,8 @@ class ZeroSum():
                 if a_inv is np.nan: 
                     if self.VERBOSE:
                         print(f'The input matrix is singular (non-invertible), so we need to modify the payoff matrix slightly and try again')
-                    return self.method_six(A=(A+1))
+                    counter += 1
+                    return self.method_six(A=(A+1), counter=counter)
 
                 # here we know that our matrix is nonsingular, so we can move forward with the computation
                 # Calculate v
@@ -312,11 +310,13 @@ class ZeroSum():
                 n = A.shape[0]
                 ones = np.ones(n)
                 v_denom = np.dot(np.dot(ones.T, a_inv), ones)
+                v_denom_check = np.matrix(ones) * np.matrix(a_inv) * np.matrix(ones).T
                 v = 1 / v_denom
                 
                 # CHECK: if the matrx has a game value of zero, then we increment by 1 and run again
                 if v < 0.000001:
-                    return self.method_six(A=(A+1))
+                    counter += 1
+                    return self.method_six(A=(A+1), counter=counter)
                 
                 else:
                     # Calculate p
@@ -326,6 +326,7 @@ class ZeroSum():
                     q = v * (np.dot(a_inv, ones))
                     
                     # print the solution
+                    v = v - counter
                     self.pretty_print_solution(solution_dict={"p": p, "q": q, "v": v, "method": "Method 6 - Formula for non-degenerate n x n"})
 
                     return {"p": p, "q": q, "v": v, "solved": True}
@@ -432,24 +433,24 @@ class ZeroSum():
 
         # calculate p
         p = []
-        for i in range(A_tableau_pivot.shape[1]-1):
+        for i in range(A_tableau_pivot.shape[0]-1):
             # if the probability vector already adds up to one, then we just add a probability of zero.
             if sum(p) == 1:
                 p.append(0)
             # if not, then we still need to add the following probability 
             else:
-                p_n = A_tableau_pivot[-1, i]/corner_val
+                p_n = A_tableau_pivot[i, -1]/corner_val
                 p.append(round(p_n, 2))
 
         # calculate q
         q = []
-        for i in range(A_tableau_pivot.shape[0]-1):
+        for i in range(A_tableau_pivot.shape[1]-1):
             # if the probability vector already adds up to one, then we just add a probability of zero.
             if sum(q) == 1:
                 q.append(0)
             # if not, then we still need to add the following probability 
             else:
-                q_m = A_tableau_pivot[i, -1]/corner_val
+                q_m = A_tableau_pivot[-1, i]/corner_val
                 q.append(round(q_m, 2))
 
         # print the solution
@@ -468,7 +469,7 @@ def main():
     """
     # define the parameters we will use 
     VERBOSE = False  # <-- set to true if you want all the output printed to the console 
-    mat = PayoffMatrices.mat3
+    mat = PayoffMatrices.mat7
 
     # create a 2 player zero sum game instance 
     game = ZeroSum(payoff_matrix=mat, VERBOSE=VERBOSE)
