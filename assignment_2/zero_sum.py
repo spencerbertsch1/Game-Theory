@@ -423,6 +423,7 @@ class ZeroSum():
         
         # now we take the resulting A_tableau_pivot matrix and find the value of the game (p, q, and v)
         # print(f'Success! Final Tableau: \n {A_tableau_pivot}')
+        print(f'Method 7 Success - Simplex method converged after {idx} pivots.')
 
         # we can now move onto the calculation of p, q, and v. 
         # This is where matrix_min_val comes back into play: 
@@ -435,22 +436,22 @@ class ZeroSum():
         p = []
         for i in range(A_tableau_pivot.shape[0]-1):
             # if the probability vector already adds up to one, then we just add a probability of zero.
-            if sum(p) == 1:
+            if sum(p) >= 1:
                 p.append(0)
             # if not, then we still need to add the following probability 
             else:
-                p_n = A_tableau_pivot[i, -1]/corner_val
+                p_n = A_tableau_pivot[-1, i]/corner_val
                 p.append(round(p_n, 2))
 
         # calculate q
         q = []
         for i in range(A_tableau_pivot.shape[1]-1):
             # if the probability vector already adds up to one, then we just add a probability of zero.
-            if sum(q) == 1:
+            if sum(q) >= 1:
                 q.append(0)
             # if not, then we still need to add the following probability 
             else:
-                q_m = A_tableau_pivot[-1, i]/corner_val
+                q_m = A_tableau_pivot[i, -1]/corner_val
                 q.append(round(q_m, 2))
 
         # print the solution
@@ -469,7 +470,7 @@ def main():
     """
     # define the parameters we will use 
     VERBOSE = False  # <-- set to true if you want all the output printed to the console 
-    mat = PayoffMatrices.mat7
+    mat = PayoffMatrices.A_i
 
     # create a 2 player zero sum game instance 
     game = ZeroSum(payoff_matrix=mat, VERBOSE=VERBOSE)
