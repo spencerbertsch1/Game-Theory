@@ -76,6 +76,7 @@ class ZeroSum():
         :param: - NA
         :return: dict - dictionary containing the equilibrium strategies and the value of the game 
         """
+        print(A)
         solved = False
         if isinstance(A, bool):
             print('something')
@@ -97,6 +98,9 @@ class ZeroSum():
                         print(f'Saddle point found! p: {p}, q: {q}, game value: {v}')
                     solved = True
 
+        if len(p) == 2:
+            print('something')
+
         # print the solution
         if solved:
             self.pretty_print_solution(solution_dict={"p": p, "q": q, "v": v, "method": "Method 1 - Saddle Points"})
@@ -112,6 +116,7 @@ class ZeroSum():
         :param: - NA
         :return: dict - dictionary containing the equilibrium strategies and the value of the game 
         """
+        print('METHOD 2')
 
         # test for saddle points
         d = self.method_one(A=A)
@@ -235,6 +240,7 @@ class ZeroSum():
         :param: - NA
         :return: dict - dictionary containing the equilibrium strategies and the value of the game 
         """
+        print('METHOD 3')
         # Step 1: use our recursive function to get the 2x2 matrix using dominant strategies
         reduced_matrix = self.dominant_recursion(input_matrix=A)
 
@@ -242,6 +248,7 @@ class ZeroSum():
         if isinstance(reduced_matrix, bool):
             pass
         else:
+            print('Method 3 successful! The matrix has been reduced to a 2 x 2. Passing the reduced matrix to Method 2.')
             self.method_two(A=reduced_matrix)
 
     def method_four(self, A: np.array):
@@ -258,7 +265,7 @@ class ZeroSum():
                 pass
 
             # now we deal with the case that there are two columns and m rows where m>2, so player 2 only has two options (q, 1-q)
-            elif A.shape[0] == 2:
+            elif A.shape[1] == 2:
                 pass
 
             else:
@@ -347,7 +354,7 @@ class ZeroSum():
         A_tableau = np.concatenate((A_with_col, bottom_row), axis=0)
         A_tableau[-1][-1] = 0
 
-        print(A_tableau)
+        # print(A_tableau)
         A_tableau_pivot = A_tableau.copy()
 
         idx = 0
@@ -365,25 +372,32 @@ class ZeroSum():
             # we use random.choice here because if more than one column is a suitable candidate, we just pick one and move on
             pivot_col_index: int = random.choice(pivot_col_index_list)
             
-            # TODO remove later!!! Just for tesitng! 
-            if idx == 0: 
-                pivot_col_index=0
+            # # TODO remove later!!! Just for tesitng! 
+            # if idx == 0: 
+            #     pivot_col_index=0
 
             # Step 3: Find the pivot row - we now need to divide the rightmost column by our pivot column 
-            r_col = A_tableau_pivot[:, -1]  
-            pivot_col = A_tableau_pivot[:, pivot_col_index]  # <-- TODO should we only use the positive values BEFORE the division? So only keep positive pivot_col vals?
-            div_list = list(np.divide(r_col, pivot_col))
-            div_list_pos = [x for x in div_list if x > 0]  # <-- TODO should we only use the positive values BEFORE the division? 
+            r_col = A_tableau_pivot[:-1, -1]  
+            pivot_col = A_tableau_pivot[:-1, pivot_col_index] 
 
-            min_val = min(div_list_pos)
-            pivot_row_index_list = []
-            for i, val in enumerate(list(div_list_pos)):
-                if val == min_val:
-                    pivot_row_index_list.append(i)
-            pivot_row_index: int = random.choice(pivot_row_index_list)
+            pivot_row_dict: dict[int: float] = {}
+            for row_index, (right_val, pivot_val) in enumerate(zip(r_col, pivot_col)):
+                # now let's find the pivot row
+                if pivot_val >= 0: 
+                    pivot_row_dict[row_index] = (right_val/pivot_val)
+
+            # now we get the pivot row index by choosing the key from the dict with the smallest value 
+            min_test_ratio = min(pivot_row_dict.values())
+            min_test_ratio_indices = []
+            for index, val in pivot_row_dict.items():
+                if val == min_test_ratio:
+                    min_test_ratio_indices.append(index)
+
+            # remember we need to do this because there might be more than one candidate row 
+            pivot_row_index: int = random.choice(min_test_ratio_indices)
 
             # so now we have our pivot column and pivot row 
-            print(f'Pivot col: {pivot_col_index}, pivot row: {pivot_row_index}')
+            # print(f'Pivot col: {pivot_col_index}, pivot row: {pivot_row_index}')
             
             # Step 3: Perform the pivot 
             pivot_value = A_tableau_pivot[pivot_row_index, pivot_col_index]
@@ -402,12 +416,12 @@ class ZeroSum():
             # flip the sign of the pivot value 
             A_tableau_pivot[pivot_row_index, pivot_col_index] = -A_tableau_pivot[pivot_row_index, pivot_col_index]
 
-            print(A_tableau_pivot.round(3))
+            # print(A_tableau_pivot.round(3))
 
             idx += 1
         
         # now we take the resulting A_tableau_pivot matrix and find the value of the game (p, q, and v)
-        print(f'Success! Final Tableau: \n {A_tableau_pivot}')
+        # print(f'Success! Final Tableau: \n {A_tableau_pivot}')
 
         # we can now move onto the calculation of p, q, and v. 
         # This is where matrix_min_val comes back into play: 
@@ -454,7 +468,7 @@ def main():
     """
     # define the parameters we will use 
     VERBOSE = False  # <-- set to true if you want all the output printed to the console 
-    mat = PayoffMatrices.mat10
+    mat = PayoffMatrices.mat3
 
     # create a 2 player zero sum game instance 
     game = ZeroSum(payoff_matrix=mat, VERBOSE=VERBOSE)
@@ -466,7 +480,8 @@ def main():
     game.method_two(A=mat)
 
     # --- METHOD #3: Recursive Reduction using Dominant Strategies --- 
-    game.method_three(A=mat)
+    # game.method_three(A=mat)
+    # remember method 3 might yield different solutions if th matrix is larger than a 2x2 because it REDUCES to a 2x2, then solves. 
 
     # --- METHOD #4: n x 2 or 2 x n --- 
     # game.method_four(A=mat)
