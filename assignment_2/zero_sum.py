@@ -22,7 +22,9 @@ from numpy.linalg import inv
 import random
 
 # local imports 
+from routines import intersection
 from zero_sum_settings import PayoffMatrices
+
 
 class ZeroSum():
 
@@ -259,7 +261,64 @@ class ZeroSum():
             
             # first we deal with the case that there are two rows and n columns where n>2, so player 1 only has two options (p, 1-p)
             if A.shape[0] == 2:
-                pass
+
+                # iterate over the columns ot make a system of linear equations
+                lines = []
+                for i in range(A.shape[1]):
+                    p1 = (0, A[1, i])
+                    diff = A[0, i] - A[1, i]
+                    p2 = (1, (diff + A[1, i]))
+                    line = (p1, p2)
+                    lines.append(line)
+
+                intersect_points = []
+                line_combos = self.comb_generator(i=len(lines))
+                for line_combo in line_combos: 
+                    line1 = lines[line_combo[0]]
+                    line2 = lines[line_combo[1]]
+                    intersection_point = intersection(line1, line2)
+                    if intersection_point != ['parallel']:
+                        intersect_points.append(intersection_point)
+
+                if len(intersect_points) == 0:
+                    print('Method 4 has failed - the lines do not intersect.')
+                    return False
+                else:
+
+                    min_intersects = []
+                    for point in intersect_points:
+                        min_intersection: bool = True
+                        curr_y = point[1]
+                        curr_x = point[0]
+                        line_to_test = ((curr_x, 0),(curr_x, 1000))
+                        # we only want to keep the points if they lie on the min-value line
+                        for line in lines:
+                            sub_intersection = intersection(line1, line_to_test)
+                            if sub_intersection != ['parallel']:
+                                sub_y = sub_intersection[1]
+
+                            if sub_y < curr_y:
+                                min_intersection = False
+
+                        if min_intersection: 
+                            min_intersects.append(point)
+
+                    # now we just get the maximum point from this list:
+                    max_y = min_intersects[0][1]
+                    for point in min_intersects:
+                        new_y = point[1]
+                        if new_y > max_y:
+                            max_y = new_y
+
+                    # extract the point that sits at the maximum of al minimums 
+                    max_min_point = 0
+                    for point in min_intersects:
+                        if point[1] == max_y:
+                            max_min_point = point
+
+                    # TODO generate p, q and v from this information! 
+                    print(max_min_point)
+
 
             # now we deal with the case that there are two columns and m rows where m>2, so player 2 only has two options (q, 1-q)
             elif A.shape[1] == 2:
@@ -470,7 +529,7 @@ def main():
     """
     # define the parameters we will use 
     VERBOSE = False  # <-- set to true if you want all the output printed to the console 
-    mat = PayoffMatrices.A_i
+    mat = PayoffMatrices.mat2
 
     # create a 2 player zero sum game instance 
     game = ZeroSum(payoff_matrix=mat, VERBOSE=VERBOSE)
@@ -482,11 +541,11 @@ def main():
     game.method_two(A=mat)
 
     # --- METHOD #3: Recursive Reduction using Dominant Strategies --- 
-    # game.method_three(A=mat)
+    game.method_three(A=mat)
     # remember method 3 might yield different solutions if th matrix is larger than a 2x2 because it REDUCES to a 2x2, then solves. 
 
     # --- METHOD #4: n x 2 or 2 x n --- 
-    # game.method_four(A=mat)
+    game.method_four(A=mat)
 
     # --- METHOD #6: Formula for non-degenerate n x n
     game.method_six(A=mat)
