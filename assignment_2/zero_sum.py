@@ -19,7 +19,7 @@ import statistics
 import numpy as np
 from itertools import combinations
 from numpy.linalg import inv
-from scipy.optimize import linprog
+import random
 
 # local imports 
 from zero_sum_settings import PayoffMatrices
@@ -46,6 +46,8 @@ class ZeroSum():
                     v_round = round(v, 2)
                 elif isinstance(v, int):
                     v_round = v
+                elif isinstance(v, list):
+                    v_round = [round(x, 2) for x in v]
                 else:
                     v_round = v.round(2)  # <-- used for np arrays
                 print(f'{method} {s} {k}: {v_round} {s}')
@@ -332,6 +334,12 @@ class ZeroSum():
         :param: A - np.array representing the input matrix
         :return: dict - dictionary containing the equilibrium strategies and the value of the game 
         """
+
+        # we can't deal with a matrix that has a value of zero, so we need to do some preprocessing 
+        matrix_min_val = np.min(A)
+        if matrix_min_val < 0: 
+            A = A - matrix_min_val  # <-- we add the magnitude of matrix_min_val to each element of A
+
         # Step 1: Write matrix in Tableau form
         right_col = np.array([np.ones(A.shape[0])])
         A_with_col = np.concatenate((A, right_col.T), axis=1)
@@ -340,12 +348,100 @@ class ZeroSum():
         A_tableau[-1][-1] = 0
 
         print(A_tableau)
+        A_tableau_pivot = A_tableau.copy()
 
-        # Step 2: Find the pivot 
-        # TODO
+        idx = 0
+        while min(A_tableau_pivot[-1, :]) < 0:
 
-        # Step 3: Perform the pivot 
+            # create copy to reference later
+            A_tableau_pivot_copy = A_tableau_pivot.copy()
 
+            # Step 2: Find the pivot column - here we just select the column with the min value of the (m+1)th row
+            min_val = min(A_tableau_pivot[-1, :-1])
+            pivot_col_index_list = []
+            for i, val in enumerate(list(A_tableau_pivot[-1, :-1])):
+                if val == min_val:
+                    pivot_col_index_list.append(i)
+            # we use random.choice here because if more than one column is a suitable candidate, we just pick one and move on
+            pivot_col_index: int = random.choice(pivot_col_index_list)
+            
+            # TODO remove later!!! Just for tesitng! 
+            if idx == 0: 
+                pivot_col_index=0
+
+            # Step 3: Find the pivot row - we now need to divide the rightmost column by our pivot column 
+            r_col = A_tableau_pivot[:, -1]  
+            pivot_col = A_tableau_pivot[:, pivot_col_index]  # <-- TODO should we only use the positive values BEFORE the division? So only keep positive pivot_col vals?
+            div_list = list(np.divide(r_col, pivot_col))
+            div_list_pos = [x for x in div_list if x > 0]  # <-- TODO should we only use the positive values BEFORE the division? 
+
+            min_val = min(div_list_pos)
+            pivot_row_index_list = []
+            for i, val in enumerate(list(div_list_pos)):
+                if val == min_val:
+                    pivot_row_index_list.append(i)
+            pivot_row_index: int = random.choice(pivot_row_index_list)
+
+            # so now we have our pivot column and pivot row 
+            print(f'Pivot col: {pivot_col_index}, pivot row: {pivot_row_index}')
+            
+            # Step 3: Perform the pivot 
+            pivot_value = A_tableau_pivot[pivot_row_index, pivot_col_index]
+            A_tableau_pivot[:, pivot_col_index] = np.divide(A_tableau_pivot[:, pivot_col_index], -pivot_value) 
+            A_tableau_pivot[pivot_row_index, :] = np.divide(A_tableau_pivot[pivot_row_index, :], pivot_value) 
+
+            for i in range(A_tableau_pivot.shape[0]):
+                for j in range(A_tableau_pivot.shape[1]):
+                    if ((i != pivot_row_index) & (j != pivot_col_index)):
+                        q = A_tableau_pivot_copy[i, j]
+                        r = A_tableau_pivot_copy[pivot_row_index, j]
+                        c = A_tableau_pivot_copy[i, pivot_col_index]
+                        new_val = q - ((r*c)/pivot_value)
+                        A_tableau_pivot[i, j] = new_val
+            
+            # flip the sign of the pivot value 
+            A_tableau_pivot[pivot_row_index, pivot_col_index] = -A_tableau_pivot[pivot_row_index, pivot_col_index]
+
+            print(A_tableau_pivot.round(3))
+
+            idx += 1
+        
+        # now we take the resulting A_tableau_pivot matrix and find the value of the game (p, q, and v)
+        print(f'Success! Final Tableau: \n {A_tableau_pivot}')
+
+        # we can now move onto the calculation of p, q, and v. 
+        # This is where matrix_min_val comes back into play: 
+        corner_val = A_tableau_pivot[-1, -1]
+        v = (1/corner_val)
+        if matrix_min_val < 0: 
+            v = v + matrix_min_val
+
+        # calculate p
+        p = []
+        for i in range(A_tableau_pivot.shape[1]-1):
+            # if the probability vector already adds up to one, then we just add a probability of zero.
+            if sum(p) == 1:
+                p.append(0)
+            # if not, then we still need to add the following probability 
+            else:
+                p_n = A_tableau_pivot[-1, i]/corner_val
+                p.append(round(p_n, 2))
+
+        # calculate q
+        q = []
+        for i in range(A_tableau_pivot.shape[0]-1):
+            # if the probability vector already adds up to one, then we just add a probability of zero.
+            if sum(q) == 1:
+                q.append(0)
+            # if not, then we still need to add the following probability 
+            else:
+                q_m = A_tableau_pivot[i, -1]/corner_val
+                q.append(round(q_m, 2))
+
+        # print the solution
+        self.pretty_print_solution(solution_dict={"p": p, "q": q, "v": v, "method": "Method 7 - Simplex"})
+
+        return {"p": p, "q": q, "v": v, "solved": True}
 
 
 def main():
@@ -358,7 +454,7 @@ def main():
     """
     # define the parameters we will use 
     VERBOSE = False  # <-- set to true if you want all the output printed to the console 
-    mat = PayoffMatrices.A_ii
+    mat = PayoffMatrices.mat10
 
     # create a 2 player zero sum game instance 
     game = ZeroSum(payoff_matrix=mat, VERBOSE=VERBOSE)
