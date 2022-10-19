@@ -401,6 +401,9 @@ class ZeroSum():
         :param: A - np.array representing the input matrix
         :return: dict - dictionary containing the equilibrium strategies and the value of the game 
         """
+        # first we define the vectors that will be used as indices for this problem 
+        X = [f'x({i})' for i in range(A.shape[0])]
+        Y = [f'y({i})' for i in range(A.shape[1])]
 
         # we can't deal with a matrix that has a value of zero, so we need to do some preprocessing 
         matrix_min_val = np.min(A)
@@ -431,11 +434,8 @@ class ZeroSum():
                     pivot_col_index_list.append(i)
             # we use random.choice here because if more than one column is a suitable candidate, we just pick one and move on
             pivot_col_index: int = random.choice(pivot_col_index_list)
-            
-            # # TODO remove later!!! Just for tesitng! 
-            # if idx == 0: 
-            #     pivot_col_index=0
 
+            
             # Step 3: Find the pivot row - we now need to divide the rightmost column by our pivot column 
             r_col = A_tableau_pivot[:-1, -1]  
             pivot_col = A_tableau_pivot[:-1, pivot_col_index] 
@@ -457,7 +457,14 @@ class ZeroSum():
             pivot_row_index: int = random.choice(min_test_ratio_indices)
 
             # so now we have our pivot column and pivot row 
-            # print(f'Pivot col: {pivot_col_index}, pivot row: {pivot_row_index}')
+            print(f'Pivot col: {pivot_col_index}, pivot row: {pivot_row_index}')
+
+            # Step 2.5: Switch the indices of the pivot row and column for the final step 
+            pivot_row_index_val = X[pivot_row_index]
+            pivot_col_index_val = Y[pivot_col_index]
+            # now we swap these values
+            X[pivot_row_index] = pivot_col_index_val
+            Y[pivot_col_index] = pivot_row_index_val
             
             # Step 3: Perform the pivot 
             pivot_value = A_tableau_pivot[pivot_row_index, pivot_col_index]
@@ -493,25 +500,45 @@ class ZeroSum():
 
         # calculate p
         p = []
-        for i in range(A_tableau_pivot.shape[0]-1):
+        for i in range(A.shape[0]):
             # if the probability vector already adds up to one, then we just add a probability of zero.
-            if sum(p) >= 1:
+            if sum(p) == 1:
                 p.append(0)
-            # if not, then we still need to add the following probability 
+
             else:
-                p_n = A_tableau_pivot[-1, i]/corner_val
-                p.append(round(p_n, 2))
+                # Here we search through the Y vector to get the indices of the x(i) values that were shifted up 
+                index_str = f'x({i})'
+
+                # we only add a non-zero value if the row was rotated up 
+                if index_str in Y: 
+                    list_idx = Y.index(index_str)
+
+                    # use the value in the last row with the list_indx'th column 
+                    p_n = A_tableau_pivot[-1, list_idx]/corner_val
+                    p.append(round(p_n, 2))
+                else:
+                    p.append(0)
 
         # calculate q
         q = []
-        for i in range(A_tableau_pivot.shape[1]-1):
+        for i in range(A.shape[1]):
             # if the probability vector already adds up to one, then we just add a probability of zero.
-            if sum(q) >= 1:
+            if sum(q) == 1:
                 q.append(0)
-            # if not, then we still need to add the following probability 
+
             else:
-                q_m = A_tableau_pivot[i, -1]/corner_val
-                q.append(round(q_m, 2))
+                # Here we search through the X vector to get the indices of the y(i) values that were shifted down to the left 
+                index_str = f'y({i})'
+
+                # we only add a non-zero value if the row was rotated down to the left 
+                if index_str in X: 
+                    list_idx = X.index(index_str)
+
+                    # use the value in the last column with the list_indx'th row 
+                    q_n = A_tableau_pivot[list_idx, -1]/corner_val
+                    q.append(round(q_n, 2))
+                else:
+                    q.append(0)
 
         # print the solution
         self.pretty_print_solution(solution_dict={"p": p, "q": q, "v": v, "method": "Method 7 - Simplex"})
@@ -529,7 +556,7 @@ def main():
     """
     # define the parameters we will use 
     VERBOSE = False  # <-- set to true if you want all the output printed to the console 
-    mat = PayoffMatrices.mat2
+    mat = PayoffMatrices.A_v
 
     # create a 2 player zero sum game instance 
     game = ZeroSum(payoff_matrix=mat, VERBOSE=VERBOSE)
@@ -545,7 +572,7 @@ def main():
     # remember method 3 might yield different solutions if th matrix is larger than a 2x2 because it REDUCES to a 2x2, then solves. 
 
     # --- METHOD #4: n x 2 or 2 x n --- 
-    game.method_four(A=mat)
+    # game.method_four(A=mat)
 
     # --- METHOD #6: Formula for non-degenerate n x n
     game.method_six(A=mat)
