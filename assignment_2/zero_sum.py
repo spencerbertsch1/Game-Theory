@@ -457,7 +457,7 @@ class ZeroSum():
             pivot_row_index: int = random.choice(min_test_ratio_indices)
 
             # so now we have our pivot column and pivot row 
-            print(f'Pivot col: {pivot_col_index}, pivot row: {pivot_row_index}')
+            # print(f'Pivot col: {pivot_col_index}, pivot row: {pivot_row_index}')
 
             # Step 2.5: Switch the indices of the pivot row and column for the final step 
             pivot_row_index_val = X[pivot_row_index]
