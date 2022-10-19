@@ -1,3 +1,21 @@
+"""
+-------------------------------
+| Dartmouth College           |
+| ENGG 199.09 - Game Theory   |
+| Fall 2022                   |
+| Spencer Bertsch             |
+-------------------------------
+
+Assignment #2 - Routines file 
+
+The goal of this script is to store routine and utility functions for use in assignment #2. 
+
+This script can be run at the command line by running the following: $ python3 routines.py
+"""
+
+# imports
+import numpy as np
+import random
 
 
 def intersection(l1: tuple, l2: tuple):
@@ -27,3 +45,35 @@ def intersection(l1: tuple, l2: tuple):
         return [x_intercept, y_intercept]
     else:
         return ['parallel']
+
+
+def matrix_generator():
+    """
+    Utility function to generate numpy matrices with the following specifications: 
+
+    Random values of m rows where 1 <= m <= 100
+    Random values of n columns where 1 <= n <= 100
+    Random element values where -1000 <= a_ij <= 1000
+    """
+    row_col_list = [x for x in range(1, 101, 1)]
+    element_list = [x for x in range(-1000, 1001, 1)]
+
+    # randomly generate the dimensions of the matrix
+    m = random.choice(row_col_list)
+    n = random.choice(row_col_list)
+
+    # create an empty numpy array filled with zeros 
+    mat = np.zeros((m, n))
+
+    # now we fill the matrix with random values chosen from the element_list
+    for i in range(m): 
+        for j in range(n):
+            mat[i, j] = random.choice(element_list)
+    
+    return mat
+
+
+# some test code
+if __name__ == "__main__":
+    m = matrix_generator()
+    print(m.shape)
