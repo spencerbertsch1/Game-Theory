@@ -20,10 +20,35 @@ import numpy as np
 from itertools import combinations
 from numpy.linalg import inv
 import random
+import pygambit
 
 # local imports 
 from routines import matrix_generator
 from zero_sum import ZeroSum
+
+
+def get_gambit_strategies(A: np.array):
+    """
+    Helper function used to generate strategies of a matrix using Gambit 
+    """
+    # first we need to change the data type
+    A = A.astype(pygambit.Rational)
+
+    # PROBLEM - All specified arrays must have the same shape
+    g = pygambit.Game.from_arrays(A, np.transpose(A))
+
+    # get the mixed strategy profiles 
+    p = g.mixed_strategy_profile()
+
+    # get the p vector 
+    p_vec = p[g.players[0]]
+    # get the q vector 
+    q_vec = p[g.players[1]]
+
+    print(f'p: {p_vec}, q: {q_vec}')
+
+    p[g.players[0].strategies[0]]
+
 
 def gambit_matrix_test():
     """
@@ -53,4 +78,6 @@ def gambit_matrix_test():
             print(f'Solutions do not match for matrix #{i}: Our game value: {v_simplex}, Gambit\'s game value: {v_gambit}')
 
 if __name__ == "__main__":
-    gambit_matrix_test()
+    # gambit_matrix_test()
+
+    get_gambit_strategies(A=np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]]))
