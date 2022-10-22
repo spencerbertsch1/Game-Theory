@@ -26,7 +26,7 @@ EDIT BELOW HERE
 
 ## How to run Question 3 (a): Take and Break
 
-1. Before running the take_and_break.py script, feel free to change the number of (x) values that are tested and printed to the console by altering line 112 of take_and_break.py. 
+1. Before running the take_and_break.py script, feel free to change the number of (x) values that are tested and printed to the console by altering line 114 of take_and_break.py. 
 
 1. Run the following command to run the take_and_break.py file: 
     1. `$ python3 take_and_break.py`
