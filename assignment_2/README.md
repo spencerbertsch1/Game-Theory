@@ -58,7 +58,8 @@ else:
     if x%2=1: g(x) = x+1
 ```
 
-**The pattern is as follows:** 
+**The pattern is as follows:**  
+
 If x is 0, 1, or 2, then g(x) = x. If x is greater than 2, then g(x) = x+1 if x is odd, and g(x) = g-1 if x is even. 
 
 ### Sub-problem: If we assume that we should take the nim sum of the g-values of each pile
