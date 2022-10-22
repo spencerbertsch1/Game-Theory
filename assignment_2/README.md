@@ -34,6 +34,35 @@ EDIT BELOW HERE
 3. You should see the solution printed with the following information: 
  - Each g(x) value printed between x=0 and x=100. 
 
+```
+g(0)=0                  g(90)=89
+g(1)=1                  g(91)=92
+g(2)=2                  g(92)=91
+g(3)=4                  g(93)=94
+g(4)=3                  g(94)=93
+g(5)=6         ...      g(95)=96
+g(6)=5                  g(96)=95
+g(7)=8                  g(97)=98
+g(8)=7                  g(98)=97
+g(9)=10                 g(99)=100
+g(10)=9                 g(100)=99
+```
+
+Here is some pseudocode that shows the logic needed to generate g(x) for any input x: 
+
+```
+if (x==0 or x==1 or x==2):
+    g(x)=x
+else:
+    if x%2=0: g(x) = x-1
+    if x%2=1: g(x) = x+1
+```
+
+**The pattern is as follows:** 
+If x is 0, 1, or 2, then g(x) = x. If x is greater than 2, then g(x) = x+1 if x is odd, and g(x) = g-1 if x is even. 
+
+### Sub-problem: If we assume that we should take the nim sum of the g-values of each pile
+- I wasn't exactly sure whether the assignment instructions were telling us to take the nim sum of the number of chips in each pile. or the nim sum of the g-values of the number of chips in each pile. I programmed both cases, however, and I'm also listing the solution for the latter case. If the previous case turns out to be correct, this section can safely be ignored, or pondered upon as an interesting experiment. 
 
 ```
 g(0)=0                  g(90)=90
@@ -49,12 +78,6 @@ g(9)=9                  g(99)=100
 g(10)=10                g(100)=99
 ```
 
-The pattern is pretty clear to see. It repeats over intervals of 4 values - see the diagram below. 
-
- <p align="center">
-    <img src="https://github.com/spencerbertsch1/Game-Theory/blob/main/assignment_2/diagrams/fig_1.png?raw=true" alt="big graph" width="85%"/>
-</p>
-
 Here is some pseudocode that shows the logic needed to generate g(x) for any input x: 
 
 ```
@@ -67,14 +90,4 @@ else:
     if x%4=3: g(x) = x+1
 ```
 
-For example: 
-
-```
-x=1 --> g(x) = x   = 1
-x=2 --> g(x) = x   = 2
-x=3 --> g(x) = x+1 = 4
-x=4 --> g(x) = x-1 = 3
-...
-```
-
-And so on. We can see above that the values of x=99 and x=100 are swapped, so these values represent index 3 and index 4 in our 4-length pattern. This makes sense because 100%4=0, so the pattern should begin again at x=101. 
+We can see this is slightly different than the expression for g(x) if we assume the assignment instructions tell us to use the nin sum of the number of chips in each pile. 
