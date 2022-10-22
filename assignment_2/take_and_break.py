@@ -94,8 +94,10 @@ def take_and_break_logic(x: int, g_x_dict: dict) -> int:
         pile_2 = x - i
         
         # get g-value for pile 1 and pile 2
-        g_pile_1 = g_x_dict[pile_1]
-        g_pile_2 = g_x_dict[pile_2]
+        # g_pile_1 = g_x_dict[pile_1]
+        # g_pile_2 = g_x_dict[pile_2]
+        g_pile_1 = pile_1
+        g_pile_2 = pile_2
 
         # generate the new nim sum that we need to add to the complete list
         nim_sum_to_add = nim_sum((g_pile_1, g_pile_2))
@@ -117,4 +119,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
