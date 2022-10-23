@@ -103,6 +103,21 @@ def nim_game():
                 solution[i] = solution[i] - (j+1)
                 print(f'The following move places us in a P position: {solution}')
 
+
+def takes_last_loses():
+    """ 
+    Simple function to test the theory that if the new multi-stakc nim game were to be structured 
+    so that whoever takes the last loses, then the P positions exist whenever the nim sum of the board 
+    is 1. 
+    """ 
+    stack1 = 10
+    stack2 = 2
+    stack3 = 2
+    while stack1 >= 0:
+        print(f'nim_sum({stack1}, {stack2}, {stack3}): {nim_sum((stack1, stack2, stack3))}')
+        stack1 -= 1
+
+
 def main():
     # choose the board we want to solve: 
     global nim_board
@@ -113,5 +128,5 @@ def main():
 
 if __name__ == "__main__":
     # main()
-
-    print(nim_sum((0,1,2,4,2,3,6)))
+    print(nim_sum((4, 1)))
+    # takes_last_loses()
