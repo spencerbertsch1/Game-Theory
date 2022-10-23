@@ -20,15 +20,60 @@ In order to run any of the test scripts in this repository, you will need python
    1. `$ cd assignment_2`
 
 ## How to run Question 1: 2-Person Zero Sum Games
-1. Before running the zero_sum.py script, 
+1. Before running the `zero_sum.py` script, feel free to change the payoff matrix that's being tested by changing the `PayoffMatrices.mat11` 
+line in in the `main()` function of `zero_sum.py`. 
 
-EDIT BELOW HERE
+2. Run the following command to run the zero_sum.py file: 
+    1. `$ python3 zero_sum.py`
+
+After running the script, you should see many different results based on which of the seven methods are being used and which of the 
+payoff matrices was loaded. Let's go through a few examples: 
+
+### Example 1: Saddle Point Matrix
+```
+_____PAYOFF MATRIX_____ 
+ [[1 2 3]
+ [4 5 6]
+ [7 8 9]]
+Method 1 - Saddle Points ----- p: [0. 0. 1.] -----
+Method 1 - Saddle Points ----- q: [1. 0. 0.] -----
+Method 1 - Saddle Points ----- v: 7 -----
+Method 7 Success - Simplex method converged after 2 pivots.
+Method 7 - Simplex ----- p: [0, 0, 1.0] -----
+Method 7 - Simplex ----- q: [1.0, 0, 0] -----
+Method 7 - Simplex ----- v: 7.0 -----
+```
+
+We see that Method 1 was able to find the saddle point and the output matches the simplex method (which correctly handles all cases). Let's look at another case. 
+
+### Example 2: Non-Saddle Point 2x2 Matrix
+```
+_____PAYOFF MATRIX_____ 
+ [[9 2]
+ [3 5]]
+Method 1 complete. No saddle point found. Passing...
+Method 1 complete. No saddle point found. Passing...
+Method 2 - 2x2 Formulas ----- p: [0.22, 0.78] -----
+Method 2 - 2x2 Formulas ----- q: [0.33, 0.67] -----
+Method 2 - 2x2 Formulas ----- v: 4.33 -----
+Method 7 Success - Simplex method converged after 2 pivots.
+Method 7 - Simplex ----- p: [0.22, 0.78] -----
+Method 7 - Simplex ----- q: [0.33, 0.67] -----
+Method 7 - Simplex ----- v: 4.33 -----
+```
+
+We see that Method 2 was able to generate the correct answer given a 2x2 matrix. The solution matches our simplex method. Let's look at another example: 
+
+### Example 3: Dominant Strategy Reduction 
+
+
+
 
 ## How to run Question 3 (a): Take and Break
 
 1. Before running the take_and_break.py script, feel free to change the number of (x) values that are tested and printed to the console by altering line 114 of take_and_break.py. 
 
-1. Run the following command to run the take_and_break.py file: 
+2. Run the following command to run the take_and_break.py file: 
     1. `$ python3 take_and_break.py`
 
 3. You should see the solution printed with the following information: 
