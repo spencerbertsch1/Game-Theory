@@ -55,7 +55,7 @@ def gambit_matrix_test():
     Test one hundred randomly generated matrices to see if my solution matches that of Gambit 
     """
 
-    for i in range(1, 101, 1):
+    for i in range(1, 10, 1):
         mat: np.array = matrix_generator()
         # create a 2 player game object and pass in the randomly generated matrix 
         game = ZeroSum(payoff_matrix=mat, VERBOSE=False)
@@ -65,19 +65,21 @@ def gambit_matrix_test():
         q_simplex = solution_dict['q']
         v_simplex = solution_dict['v']
 
-        # now we need to find the same solutions using Gambit
-        v_gambit = 0.0
+        print(v_simplex)
 
-        # finally, we compare the solutions
-        v_simplex_round = v_simplex.round(1)
-        v_gambit = v_gambit.round(1)
+        # # now we need to find the same solutions using Gambit
+        # v_gambit = 0.0
 
-        if v_simplex == v_gambit:
-            print(f'Our solution matches Gambit for matrix #{i}, continuing to the next matrix.')
-        else:
-            print(f'Solutions do not match for matrix #{i}: Our game value: {v_simplex}, Gambit\'s game value: {v_gambit}')
+        # # finally, we compare the solutions
+        # v_simplex_round = v_simplex.round(1)
+        # v_gambit = v_gambit.round(1)
+
+        # if v_simplex == v_gambit:
+        #     print(f'Our solution matches Gambit for matrix #{i}, continuing to the next matrix.')
+        # else:
+        #     print(f'Solutions do not match for matrix #{i}: Our game value: {v_simplex}, Gambit\'s game value: {v_gambit}')
 
 if __name__ == "__main__":
-    # gambit_matrix_test()
+    gambit_matrix_test()
 
-    get_gambit_strategies(A=np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]]))
+    # get_gambit_strategies(A=np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]]))
