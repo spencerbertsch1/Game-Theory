@@ -91,6 +91,21 @@ So here's an interesting example of how our recursive implementaiton of the domi
 
 ### Example 4: 2xn or mx2 Matrices 
 
+```
+_____PAYOFF MATRIX_____ 
+ [[2 3 1 5]
+ [4 1 6 0]]
+Method 4 - (n x 2) or (2 x m) ----- p: [0.6, 0.4] -----
+Method 4 - (n x 2) or (2 x m) ----- q: [] -----
+Method 4 - (n x 2) or (2 x m) ----- v: 0 -----
+Method 7 Success - Simplex method converged after 2 pivots.
+Method 7 - Simplex ----- p: [0.71, 0.29] -----
+Method 7 - Simplex ----- q: [0, 0.71, 0.29, 0] -----
+Method 7 - Simplex ----- v: 2.43 -----
+```
+
+We can see that the p-vector here almost matches, but we do have some differences between the mixed strategy for P2 we got using Method 4 and the mixed strategy for P2 we got using Simplex. I would trust the simplex soluiton! Let's move on. 
+
 ### Example 5: Fully Active Matrices - Principal of Indifference
 
 ```
