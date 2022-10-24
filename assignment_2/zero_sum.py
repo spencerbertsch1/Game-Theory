@@ -242,6 +242,7 @@ class ZeroSum():
 
             # make the recursive call passing in the newly reduced matrix 
             if dom_strategy:
+                print(f'Reduced (intermediate) matrix: \n {reduced_matrix}')
                 return self.dominant_recursion(input_matrix=reduced_matrix)
             else:
                 print(f'Method 3 has failed - there are no dominant strategies, but the payoff matrix is ({input_matrix.shape[0]} x {input_matrix.shape[1]}) not (2 x 2). Passing...')
@@ -263,6 +264,7 @@ class ZeroSum():
         else:
             print('Method 3 successful! The matrix has been reduced to a 2 x 2. Passing the reduced matrix to Method 2.')
             self.method_two(A=reduced_matrix)
+            print(f'Reduced Matrix: \n {reduced_matrix}')
 
     def method_four(self, A: np.array):
         """
@@ -330,9 +332,11 @@ class ZeroSum():
                         if point[1] == max_y:
                             max_min_point = point
 
-                    # TODO generate p, q and v from this information! 
-                    print(max_min_point)
-
+                    # generate p, q and v from this information! 
+                    p = [max_min_point[0], (1-max_min_point[0])]
+                    q = []  # <-- placeholder 
+                    v = 0   # <-- placeholder 
+                    self.pretty_print_solution(solution_dict={"p": p, "q": q, "v": v, "method": "Method 4 - (n x 2) or (2 x m)"})
 
             # now we deal with the case that there are two columns and m rows where m>2, so player 2 only has two options (q, 1-q)
             elif A.shape[1] == 2:
@@ -638,29 +642,29 @@ def main():
     """
     # define the parameters we will use 
     VERBOSE = False  # <-- set to true if you want all the output printed to the console 
-    mat = PayoffMatrices.mat11
+    mat = PayoffMatrices.mat2
 
     # create a 2 player zero sum game instance 
     game = ZeroSum(payoff_matrix=mat, VERBOSE=VERBOSE)
 
     # --- METHOD #1: Check for saddle points --- 
-    game.method_one(A=mat.copy())
+    # game.method_one(A=mat.copy())
 
     # --- METHOD #2: Use the 2 x 2 matrix formula --- 
-    game.method_two(A=mat.copy())
+    # game.method_two(A=mat.copy())
 
     # --- METHOD #3: Recursive Reduction using Dominant Strategies --- 
-    game.method_three(A=mat.copy())
+    # game.method_three(A=mat.copy())
     # remember method 3 might yield different solutions if th matrix is larger than a 2x2 because it REDUCES to a 2x2, then solves. 
 
     # --- METHOD #4: n x 2 or 2 x n --- 
     game.method_four(A=mat.copy())
 
     # --- METHOD #5: n x 2 or 2 x n --- 
-    game.method_five(A=mat.copy())
+    # game.method_five(A=mat.copy())
 
     # --- METHOD #6: Formula for non-degenerate n x n
-    game.method_six(A=mat.copy())
+    # game.method_six(A=mat.copy())
 
     # --- METHOD #7: Simplex
     game.method_seven(A=mat.copy())
