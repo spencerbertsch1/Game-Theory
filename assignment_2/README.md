@@ -52,7 +52,6 @@ _____PAYOFF MATRIX_____
  [[9 2]
  [3 5]]
 Method 1 complete. No saddle point found. Passing...
-Method 1 complete. No saddle point found. Passing...
 Method 2 - 2x2 Formulas ----- p: [0.22, 0.78] -----
 Method 2 - 2x2 Formulas ----- q: [0.33, 0.67] -----
 Method 2 - 2x2 Formulas ----- v: 4.33 -----
@@ -66,8 +65,134 @@ We see that Method 2 was able to generate the correct answer given a 2x2 matrix.
 
 ### Example 3: Dominant Strategy Reduction 
 
+```
+_____PAYOFF MATRIX_____ 
+ [[1 2 3]
+ [4 5 6]
+ [7 8 9]]
+ Reduced (intermediate) matrix: 
+ [[1 2 3]
+ [7 8 9]]
+Reduced matrix: 
+ [[1 3]
+ [7 9]]
+Method 3 successful! The matrix has been reduced to a 2 x 2. Passing the reduced matrix to Method 2.
+Method 2 should not be used - this payoff matrix has a saddle point! Using Method 1 instead.
+Method 1 - Saddle Points ----- p: [0. 1.] -----
+Method 1 - Saddle Points ----- q: [1. 0.] -----
+Method 1 - Saddle Points ----- v: 7 -----
+Method 7 Success - Simplex method converged after 2 pivots.
+Method 7 - Simplex ----- p: [0, 0, 1.0] -----
+Method 7 - Simplex ----- q: [1.0, 0, 0] -----
+Method 7 - Simplex ----- v: 7.0 -----
+```
+
+So here's an interesting example of how our recursive implementaiton of the dominant strategy reduction method worked. First the method removed the middle row because it was completely dominated by the bottom row for P1. Next, the method found that the center column was completely dominated by the right column. At this point the matrix was a 2x2, so it was passed to methods 2 and 1 to be completed. The solution matches the simplex method. 
+
+### Example 4: 2xn or mx2 Matrices 
+
+### Example 5: Fully Active Matrices - Principal of Indifference
+
+```
+_____PAYOFF MATRIX_____ 
+ [[ 0  1 -2]
+ [ 1 -2  3]
+ [-2  3 -4]]
+Method 5 - Principal of Indifference ----- p: [0.25 0.5  0.25] -----
+Method 5 - Principal of Indifference ----- q: [0.25 0.5  0.25] -----
+Method 5 - Principal of Indifference ----- v: 0.0 -----
+Method 7 Success - Simplex method converged after 3 pivots.
+Method 7 - Simplex ----- p: [0.25, 0.5, 0.25] -----
+Method 7 - Simplex ----- q: [0.25, 0.5, 0.25] -----
+Method 7 - Simplex ----- v: 0.0 -----
+```
+
+Here we can see an example in which we were able to reduce the matrix down to a system of linear equations that was solved using the `numpy.linalg.solve()` method. The solution matches what we get from Simplex. 
+
+### Example 6: Fully Active Matrices - Principal of Indifference
+
+```
+_____PAYOFF MATRIX_____ 
+ [[ 1 -2  3 -4]
+ [ 0  1 -2  3]
+ [ 0  0  1 -2]
+ [ 0  0  0  1]]
+Method 1 complete. No saddle point found. Passing...
+Method 6 - Formula for non-degenerate n x n ----- p: [0.08 0.25 0.33 0.33] -----
+Method 6 - Formula for non-degenerate n x n ----- q: [0.33 0.33 0.25 0.08] -----
+Method 6 - Formula for non-degenerate n x n ----- v: 0.08 -----
+Method 7 Success - Simplex method converged after 4 pivots.
+Method 7 - Simplex ----- p: [0.08, 0.25, 0.33, 0.33] -----
+Method 7 - Simplex ----- q: [0.33, 0.33, 0.25, 0.08] -----
+Method 7 - Simplex ----- v: 0.08 -----
+```
+
+Here we see Method six functioning successfully for a nonsingular input matrix. The output matches the Simplex method. 
+
+### Example 7: Simplex Method
+```
+_____PAYOFF MATRIX_____ 
+ [[ 1  7  3]
+ [13  5  6]
+ [ 7  8  9]]
+Method 7 Success - Simplex method converged after 2 pivots.
+Method 7 - Simplex ----- p: [0, 0.11, 0.89] -----
+Method 7 - Simplex ----- q: [0.33, 0.67, 0] -----
+Method 7 - Simplex ----- v: 7.67 -----
+```
+
+I have used the simplex method as a benchmark through out this assignment. As far as I can tell it works on every input matrix I have used. 
 
 
+### Random Matrix Generation and Solving
+
+In addition to implementing these methods, I also created a script that generates 100 random matrices where the following rules hold: 
+- Random values of m rows where 1 <= m <= 100
+- Random values of n columns where 1 <= n <= 100
+- Random element values where -1000 <= a_ij <= 1000
+
+Feel free to run gambit_test.py to see a few example outputs - I will add one below as well. 
+
+```
+_____PAYOFF MATRIX_____ 
+ [[ 549. -634. -626. -257.  235. -589.  297. -947.  240.]
+ [-111. -384. -475. -615. -144.  945.  876. -205.  858.]
+ [ 220. -134. -493.  -84.  574.  993. -280.  912. -600.]
+ [-219. -881. -448.  126. -127. -779. -959.  297.  979.]
+ [-617.  889. -213.  130.  543. -878.  763.  308.  509.]
+ [ -72.  -55.   60.  976.  905.  864.  667. -949.  893.]
+ [ 402.  247. -925. -760. -238.  671.  886.  634.   37.]
+ [ 944.  172.  551. -560.  875.  933. -603.  714.  815.]
+ [-989.  487.  -78. -240.  390. -930.  946.  359.  -48.]
+ [ 205.  520.   20. -417. -600.  -31.  929.  567.  606.]
+ [-810. -974. -587.  789.  550.  794. -484.  274. -470.]
+ [-609.  -52. -609.  351.  139. -593.  922. -641. -857.]
+ [ 717. -160. -670.  529.   96.  969. -483. -363.  942.]
+ [ 451.  965. -252. -588.  405. -186.  741. -165. -522.]
+ [ 771.  -60. -310.  345.  251. -571. -860. -664.  208.]
+ [ 736.   20. -832.  248.  894.  827. -777. -131. -702.]
+ [ 864.  390. -575.  485.  359.  730. -242.  304. -513.]
+ [ -61. -712. -499. -374.  330.  425.  804.  145.  354.]
+ [ 313. -355. -794.  661.  700. -367.  283.  417.   33.]
+ [-207.  872. -680.  346.  830. -332.  953.  802.  623.]
+ [-809.  287.  690.  298.  534. -906. -577. -127.  266.]
+ [ 416. -923. -914.  326.  290.  -46. -963.  571. -829.]
+ [-711.  634.  562.  807. -631.  883.  713. -591.  432.]
+ [-122.  256.  395. -380.  662. -763. -133. -308. -596.]
+ [-230.  255.  -63.  615. -570. -699. -745. -995.  139.]
+ [ 519.  849.  332.  541. -781. -865. -977. -383.  942.]
+ [-816. -234. -198. -132. -123. -138.  643.  836.   31.]
+ [  32.  524.  130. -349.  793.  789.  411. -347.  -95.]
+ [-231.  556.  873. -985.  813.  641.  970.   72.  442.]
+ [ 122. -309.  -68.  120.  217. -835.  347.  836. -687.]
+ [-276.   57.  956.  141. -616.  282. -207. -584. -432.]
+ [ 815. -794.  519. -599. -678.  -27.  348.  388. -953.]
+ [-848.   79.  347. -813.  465. -511. -988.  718. -790.]]
+Method 7 Success - Simplex method converged after 19 pivots.
+Method 7 - Simplex ----- p: [0, 0, 0, 0, 0, 0.08, 0, 0.25, 0, 0, 0, 0, 0, 0, 0, 0, 0.11, 0, 0, 0.07, 0, 0, 0.26, 0, 0, 0, 0, 0, 0, 0.17, 0, 0.06, 0] -----
+Method 7 - Simplex ----- q: [0.21, 0.03, 0.2, 0.25, 0, 0, 0.15, 0.15, 0.01] -----
+Method 7 - Simplex ----- v: 203.01 -----
+```
 
 ## How to run Question 3 (a): Take and Break
 
