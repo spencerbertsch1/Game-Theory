@@ -386,35 +386,40 @@ class ZeroSum():
         Player2 are "active." 
         """
 
-        boost = 0
-        test_threshold: int = 10
-        while np.linalg.cond(A) >= 1/sys.float_info.epsilon: 
-            # the input matrix A is singular, so we add one to it
-            boost += 1
-            A += 1
-
-            if boost > test_threshold:
-                print(f'Method 5 has failed - all {test_threshold} incremented matrices are singular. Passing...')
-                return False
-
-        # construct linear equation matrix and solve
-        solution = self.indifference_method_solve(A=A)
-        v = solution[-1] - boost
-        p = solution[:-1]
-
-        # test to see if the matrix is symmetric. If so, then q = p, and we're done. 
-        if self.is_symmetric(A=A):
-            q = p.copy()
+        # CHECK: ensure the matrix is square
+        if A.shape[0] != A.shape[1]:
+            print(f'Method 5 can only be used on (n x n) matrices, not ({A.shape[0]} x {A.shape[1]}) matrices. Passing...')
         else:
-            # here we know q does not equal p, so we use the principle of indifference to find it. 
-            # construct linear equation matrix
-            solution = self.indifference_method_solve(A=A.T)
-            q = solution[:-1]
 
-        self.pretty_print_solution(solution_dict={"p": p, "q": q, "v": v, 
-                                   "method": "Method 5 - Principal of Indifference"})
+            boost = 0
+            test_threshold: int = 10
+            while np.linalg.cond(A) >= 1/sys.float_info.epsilon: 
+                # the input matrix A is singular, so we add one to it
+                boost += 1
+                A += 1
 
-        return {"p": p, "q": q, "v": v, "solved": True}
+                if boost > test_threshold:
+                    print(f'Method 5 has failed - all {test_threshold} incremented matrices are singular. Passing...')
+                    return False
+
+            # construct linear equation matrix and solve
+            solution = self.indifference_method_solve(A=A)
+            v = solution[-1] - boost
+            p = solution[:-1]
+
+            # test to see if the matrix is symmetric. If so, then q = p, and we're done. 
+            if self.is_symmetric(A=A):
+                q = p.copy()
+            else:
+                # here we know q does not equal p, so we use the principle of indifference to find it. 
+                # construct linear equation matrix
+                solution = self.indifference_method_solve(A=A.T)
+                q = solution[:-1]
+
+            self.pretty_print_solution(solution_dict={"p": p, "q": q, "v": v, 
+                                    "method": "Method 5 - Principal of Indifference"})
+
+            return {"p": p, "q": q, "v": v, "solved": True}
 
 
 
@@ -529,8 +534,10 @@ class ZeroSum():
             pivot_row_dict: dict[int: float] = {}
             for row_index, (right_val, pivot_val) in enumerate(zip(r_col, pivot_col)):
                 # now let's find the pivot row
-                if pivot_val >= 0: 
+                if pivot_val > 0: 
                     pivot_row_dict[row_index] = (right_val/pivot_val)
+                elif pivot_val == 0:
+                    pivot_row_dict[row_index] = np.inf
 
             # now we get the pivot row index by choosing the key from the dict with the smallest value 
             min_test_ratio = min(pivot_row_dict.values())
@@ -642,29 +649,29 @@ def main():
     """
     # define the parameters we will use 
     VERBOSE = False  # <-- set to true if you want all the output printed to the console 
-    mat = PayoffMatrices.mat2
+    mat = PayoffMatrices.mat11
 
     # create a 2 player zero sum game instance 
     game = ZeroSum(payoff_matrix=mat, VERBOSE=VERBOSE)
 
     # --- METHOD #1: Check for saddle points --- 
-    # game.method_one(A=mat.copy())
+    game.method_one(A=mat.copy())
 
     # --- METHOD #2: Use the 2 x 2 matrix formula --- 
-    # game.method_two(A=mat.copy())
+    game.method_two(A=mat.copy())
 
     # --- METHOD #3: Recursive Reduction using Dominant Strategies --- 
     # game.method_three(A=mat.copy())
     # remember method 3 might yield different solutions if th matrix is larger than a 2x2 because it REDUCES to a 2x2, then solves. 
 
     # --- METHOD #4: n x 2 or 2 x n --- 
-    game.method_four(A=mat.copy())
+    # game.method_four(A=mat.copy())
 
     # --- METHOD #5: n x 2 or 2 x n --- 
     # game.method_five(A=mat.copy())
 
     # --- METHOD #6: Formula for non-degenerate n x n
-    # game.method_six(A=mat.copy())
+    game.method_six(A=mat.copy())
 
     # --- METHOD #7: Simplex
     game.method_seven(A=mat.copy())
