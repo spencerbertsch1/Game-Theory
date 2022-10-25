@@ -67,7 +67,7 @@ class RecursiveGame:
         print(f'RECURSIVE SOLUTION - Final Value: {round(game_value, 3)}')
         return game_value
 
-def main():
+def main_i():
 
     G = RecursiveGame(Game=Game1)
     G.game_tree_search(mat = Game1.boards[0])
@@ -80,5 +80,11 @@ def main():
     # print(f'Final Value: {round(game_value, 3)}')
 
 
+def main_ii():
+
+    pass  # TODO 
+
+
 if __name__ == "__main__":
-    main()
+    main_i()
+    main_ii()
