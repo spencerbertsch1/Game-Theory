@@ -29,7 +29,7 @@ After running the script, you should see the following output:
 
 ## How to run Question 1(b): Sample Recursive Games
 
-1. Before running the recursive_games.py script, feel free to change the main() function to run either problem `1_b_i` or problem `1_b_ii`. Feel free to leave both calls uncommented to that both parts of the problem will run. This is how I sil submit my assignment. 
+1. Before running the recursive_games.py script, feel free to change the main() function to run either problem `1_b_i` or problem `1_b_ii`. Feel free to leave both calls uncommented to that both parts of the problem will run. This is how I will submit my assignment. 
 
 ### Problem 1_b_i
 
@@ -51,4 +51,4 @@ Method 7 - Simplex ----- v: 1.29 -----
 RECURSIVE SOLUTION - Final Value: 1.286
 ```
 
-This solution matches the value that we get when solving this game by hand (9/7). 
+This solution matches the value that we get when solving this game by hand 9/7 (1.286 when rounded to 3 decimals). 
