@@ -29,10 +29,26 @@ After running the script, you should see the following output:
 
 ## How to run Question 1(b): Sample Recursive Games
 
-1. Before running the take_and_break.py script, YYY
+1. Before running the recursive_games.py script, feel free to change the main() function to run either problem `1_b_i` or problem `1_b_ii`. Feel free to leave both calls uncommented to that both parts of the problem will run. This is how I sil submit my assignment. 
 
-2. Run the following command to run the YYY.py file: 
-    1. `$ python3 YYY.py`
+### Problem 1_b_i
+
+1. This section will specifically describe problem `1_b_ii`. 
+
+2. Run the following command to run the recursive_games.py file with `main_i()` uncommented at the bottom of the file: 
+    1. `$ python3 recursive_games.py`
 
 3. You should see the solution printed with the following information: 
- 
+
+``` 
+_____PAYOFF MATRIX_____ 
+ [[0 3.0]
+ [3.0 -1.0]]
+Method 7 Success - Simplex method converged after 2 pivots.
+Method 7 - Simplex ----- p: [0.57, 0.43] -----
+Method 7 - Simplex ----- q: [0.57, 0.43] -----
+Method 7 - Simplex ----- v: 1.29 -----
+RECURSIVE SOLUTION - Final Value: 1.286
+```
+
+This solution matches the value that we get when solving this game by hand (9/7). 
