@@ -48,7 +48,10 @@ Method 7 Success - Simplex method converged after 2 pivots.
 Method 7 - Simplex ----- p: [0.57, 0.43] -----
 Method 7 - Simplex ----- q: [0.57, 0.43] -----
 Method 7 - Simplex ----- v: 1.29 -----
-RECURSIVE SOLUTION - Final Value: 1.286
+RECURSIVE SOLUTION 
+ Value: 1.286 
+ p: [0.57, 0.43] 
+ q: [0.57, 0.43]
 ```
 
 This solution matches the value that we get when solving this game by hand 9/7 (1.286 when rounded to 3 decimals). 
