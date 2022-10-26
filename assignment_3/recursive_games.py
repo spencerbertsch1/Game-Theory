@@ -63,9 +63,13 @@ class RecursiveGame:
         print(f'Final Matrix: \n {mat}')
         game = ZeroSum(payoff_matrix=mat, VERBOSE=True)
         # here we have a matrix that is entirely composed of integers, so we can use the simplex method to solve 
-        game_value = game.method_seven(A=mat)['v']
-        print(f'RECURSIVE SOLUTION - Final Value: {round(game_value, 3)}')
-        return game_value
+        game_dict = game.method_seven(A=mat)
+        v = game_dict['v']
+        p = game_dict['p']
+        q = game_dict['q']
+        print(f'RECURSIVE SOLUTION \n Value: {round(v, 3)} \n p: {p} \n q: {q}')
+
+        return v
 
 def main_i():
 
