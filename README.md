@@ -8,3 +8,6 @@
  - [Simplex Method](https://github.com/spencerbertsch1/Game-Theory/blob/main/assignment_2/zero_sum.py)
  - [Dominant Recursion](https://github.com/spencerbertsch1/Game-Theory/blob/main/assignment_2/zero_sum.py)
 
+[Recursive Games](https://github.com/spencerbertsch1/Game-Theory/tree/main/assignment_3)
+- [Guess it!](https://github.com/spencerbertsch1/Game-Theory/blob/main/assignment_3/guess_it.py)
+- [Sample Recursive Games](https://github.com/spencerbertsch1/Game-Theory/blob/main/assignment_3/recursive_games.py)
