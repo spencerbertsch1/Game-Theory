@@ -15,18 +15,16 @@ In order to run any of the test scripts in this repository, you will need python
        1. `$ conda activate game_theory_env`
    3. Then proceed to the following step. 
    
-
 2. `cd` to the assignment_2 directory by running the following command:
    1. `$ cd assignment_2`
 
 ## How to run Question 1(a): Guess Target Card
-1. Run the following command to run the guess_it.py file: 
+1. Run the following command to run the guess_it.py file:
     1. `$ python3 guess_it.py`
 
-After running the script, you should see the following output: 
+After running the script, you should see the following output:
 
-```
------  Solution to G(m=1, n=1): v=0.5, p=[0.67, 0.33], q=[0.5, 0.5]  -----
+```-----  Solution to G(m=1, n=1): v=0.5, p=[0.67, 0.33], q=[0.5, 0.5]  -----
 -----  Solution to G(m=1, n=2): v=0.63, p=[0.67, 0.33], q=[0.56, 0.44]  -----
 -----  Solution to G(m=1, n=3): v=0.67, p=[0.74, 0.26], q=[0.45, 0.55]  -----
 -----  Solution to G(m=1, n=4): v=0.72, p=[0.79, 0.21], q=[0.38, 0.62]  -----
@@ -64,22 +62,22 @@ After running the script, you should see the following output:
 -----  Solution to G(m=6, n=6): v=0.51, p=[0.8, 0.2], q=[0.84, 0.16]  -----
 ```
 
-The solution G(m=1, n=1): 0.5 matches what we found in class. 
+The solution G(m=1, n=1): 0.5 matches what we found in class.
 
 ## How to run Question 1(b): Sample Recursive Games
 
-1. Before running the recursive_games.py script, feel free to change the main() function to run either problem `1_b_i` or problem `1_b_ii`. Feel free to leave both calls uncommented to that both parts of the problem will run. This is how I will submit my assignment. 
+1. Before running the recursive_games.py script, feel free to change the main() function to run either problem `1_b_i` or problem `1_b_ii`. Feel free to leave both calls uncommented to that both parts of the problem will run. This is how I will submit my assignment.
 
 ### Problem 1_b_i
 
-1. This section will specifically describe problem `1_b_ii`. 
+1. This section will specifically describe problem `1_b_ii`.
 
 2. Run the following command to run the recursive_games.py file with `main_i()` uncommented at the bottom of the file: 
     1. `$ python3 recursive_games.py`
 
-3. You should see the solution printed with the following information: 
+3. You should see the solution printed with the following information:
 
-``` 
+```
 _____PAYOFF MATRIX_____ 
  [[0 3.0]
  [3.0 -1.0]]
