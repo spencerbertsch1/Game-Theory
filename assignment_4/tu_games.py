@@ -22,10 +22,10 @@ class BimatrixGames():
     P1_matrix_1 = np.array([[0, 3], [4, 2]])
     P2_matrix_1 = np.array([[4, 2], [0, 3]])
     mat1 = [P1_matrix_1, P2_matrix_1]
-    
+
     # game #2
-    P1_matrix_2 = np.array([[0, 3], [4, 2]])
-    P2_matrix_2 = np.array([[4, 2], [0, 3]])
+    P1_matrix_2 = np.array([[3, 1], [0, 2]])
+    P2_matrix_2 = np.array([[1, 2], [3, 0]])
     mat2 = [P1_matrix_2, P2_matrix_2]
 
     # game #3
