@@ -21,14 +21,18 @@ In order to run any of the test scripts in this repository, you will need python
 
 ## How to run Question 1(b): brouwer_fixed_point.py
 
-1. Before running the recursive_games.py script, feel free to change the main() function to run either problem `1_b_i` or problem `1_b_ii`. Feel free to leave both calls uncommented to that both parts of the problem will run. This is how I will submit my assignment. 
+#### This section will specifically describe problem `1(b)`.
 
-### Problem 2(c)
+1. Before running the brouwer_fixed_point.py script, ...
 
-1. This section will specifically describe problem `2(c)`.
+2. Run the following command to run the brouwer_fixed_point.py file: 
+    1. `$ python3 brouwer_fixed_point.py`
 
-2. Run the following command to run the bimatrix_tu_game.py file: 
-    1. `$ python3 bimatrix_tu_game.py`
+3. TODO 
+
+## How to run Question 2(c): bimatrix_tu_game.py
+
+#### This section will specifically describe problem `2(c)`.
 
 Methods: 
 -  Find sigma (the total payoff) using the following expression: sigma = MAX(a_ij + b_ij)
@@ -37,7 +41,10 @@ Methods:
 - Find phi (the payoff split) using the following expression: ((sigma + delta)/2, (sigma - delta)/2)
 - And we're done! Now we just log the total payoff (sigma) and the payoff split (phi). 
 
-3. You should see the solution printed with the following information: 
+1. Run the following command to run the bimatrix_tu_game.py file: 
+    1. `$ python3 bimatrix_tu_game.py`
+
+2. You should see the solution printed with the following information: 
 
 ``` 
 Original Bimatrix:
