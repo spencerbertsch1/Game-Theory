@@ -119,11 +119,11 @@ def generator_test(VERBOSE: bool, num_test_matrices: int):
         solve_bimatrix(bimatrix=bimatrix, VERBOSE=VERBOSE)
         print('\n')
 
-
 if __name__ == "__main__":
 
     # main function that tests individual matrices from the tu_games.py file 
     main(VERBOSE=True)
+    print('\n\n')
 
     # function that shows outputs for the randomly generated matrices 
     generator_test(VERBOSE=False, num_test_matrices=3)
