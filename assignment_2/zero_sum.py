@@ -649,7 +649,7 @@ def main():
     """
     # define the parameters we will use 
     VERBOSE = False  # <-- set to true if you want all the output printed to the console 
-    mat = PayoffMatrices.mat11
+    mat = PayoffMatrices.mat12
 
     # create a 2 player zero sum game instance 
     game = ZeroSum(payoff_matrix=mat, VERBOSE=VERBOSE)
@@ -658,7 +658,7 @@ def main():
     game.method_one(A=mat.copy())
 
     # --- METHOD #2: Use the 2 x 2 matrix formula --- 
-    game.method_two(A=mat.copy())
+    # game.method_two(A=mat.copy())
 
     # --- METHOD #3: Recursive Reduction using Dominant Strategies --- 
     # game.method_three(A=mat.copy())
@@ -671,7 +671,7 @@ def main():
     # game.method_five(A=mat.copy())
 
     # --- METHOD #6: Formula for non-degenerate n x n
-    game.method_six(A=mat.copy())
+    # game.method_six(A=mat.copy())
 
     # --- METHOD #7: Simplex
     game.method_seven(A=mat.copy())
