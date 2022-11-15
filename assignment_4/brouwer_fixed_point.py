@@ -128,9 +128,6 @@ def brouwer_dfs(domain: range, function: str, tolerance: float, range_step: floa
     # initialize solved
     solved = False
 
-    # increment node_search_count
-    node_search_count += 1
-
     # initialize the visited on nodes on the first call of this function
     if visited_nodes is None:
         visited_nodes = []
@@ -164,7 +161,9 @@ def brouwer_dfs(domain: range, function: str, tolerance: float, range_step: floa
         if ((not arreq_in_list(myarr=node, list_arrays=visited_nodes)) & (solved is False)):
             if VERBOSE: 
                 print(f'Node min: {np.min(node)}, Node max: {np.max(node)}')
-            # node_search_count += 1
+            
+            # increment node_search_count
+            node_search_count += 1
 
             visited_nodes.append(node)
             brouwer_dfs(domain=node, function=function, tolerance=tolerance, 
