@@ -23,7 +23,7 @@ In order to run any of the test scripts in this repository, you will need python
 
 #### This section will specifically describe problem `1(b)`.
 
-1. Before running the brouwer_fixed_point.py script, ...
+1. Before running the brouwer_fixed_point.py script, feel free to change the `tolerance` value on line 203 of `brouwer_fixed_point.py`. 
 
 2. Run the following command to run the brouwer_fixed_point.py file: 
     1. `$ python3 brouwer_fixed_point.py`
