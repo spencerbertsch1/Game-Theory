@@ -34,7 +34,7 @@ First let's examine how the DFS-based range splitting algorithm works. This algo
     <img src="https://github.com/spencerbertsch1/Game-Theory/blob/main/assignment_4/diagrams/DFS_graph.png" alt="DFS graph" width="80%"/>
 </p>
 
-Given this as the input expression, the fixed point can be found quite quickly using the depth-first search based method. It can also be found -- albeit more inefficiently -- using the linear search function. Let's look at an example mapping function and look at the output for the chosen sample function. 
+It turns out that the Brouwer fixed point can be found quite quickly using the depth-first search based method. It can also be found using the linear search method as well, but the linear search takes much longer in almost all cases. Let's look at an example mapping function and look at the output for the chosen sample function. 
 
 - Here the continuous mapping function is: `f(x) = 10 * sin(0.2*x) + 0.5*x + 2`
 
