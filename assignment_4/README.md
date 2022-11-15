@@ -28,6 +28,12 @@ In order to run any of the test scripts in this repository, you will need python
 2. Run the following command to run the brouwer_fixed_point.py file: 
     1. `$ python3 brouwer_fixed_point.py`
 
+First let's examine how the DFS-based range splitting algorithm works. This algorithm takes a continuous space and bispects the ranges into "nodes" that consist of sub-ranges. These nodes are searched using a depth first search algorithm and the mean value of each node is tested against the f(x) value of that same mean. See the below diagram for a better view of the DFS range splitting graph that gets generated: 
+
+ <p align="center">
+    <img src="https://github.com/spencerbertsch1/Game-Theory/blob/main/assignment_4/diagrams/DFS_graph.png" alt="DFS graph" width="60%"/>
+</p>
+
 
 - Here the continuous mapping function is: `f(x) = 10 * sin(0.2*x) + 0.5*x + 2`
 
