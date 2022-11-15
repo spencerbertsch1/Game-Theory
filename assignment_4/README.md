@@ -28,18 +28,35 @@ In order to run any of the test scripts in this repository, you will need python
 2. Run the following command to run the brouwer_fixed_point.py file: 
     1. `$ python3 brouwer_fixed_point.py`
 
-3. TODO 
+
+- Here the continuous mapping function is: `f(x) = 10 * sin(0.2*x) + 0.5*x + 2`
+
+Given this as the input expression, the fixed point can be found quite quickly using the depth-first search based method and it can be found -- albeit more inefficiently -- using the linear search function. See the below code output. 
+
+``` 
+Solution Found! 
+------------------------------
+Depth First Search Method fixed point solution -> x: 13.15, f(x): 13.471.         
+Points match to within a tolerance of 0.1. 
+------------------------------         
+Number of nodes searched before finding a solution 7. 
+------------------------------
+ 
+Solution Found! 
+------------------------------
+Linear Method fixed point solution -> x: 13.3, f(x): 13.282.         
+Points match to within a tolerance of 0.1. 
+------------------------------         
+Number of nodes searched before finding a solution 134. 
+------------------------------
+``` 
+
+
+
 
 ## How to run Question 2(c): bimatrix_tu_game.py
 
 #### This section will specifically describe problem `2(c)`.
-
-Methods: 
--  Find sigma (the total payoff) using the following expression: sigma = MAX(a_ij + b_ij)
--  Find delta using the following expression: delta = val(A - B)
-    - Here (A-B) represents the matrix that we get if we subtract all P1 payoffs from P2 payoffs (a_ij - b_ij)
-- Find phi (the payoff split) using the following expression: ((sigma + delta)/2, (sigma - delta)/2)
-- And we're done! Now we just log the total payoff (sigma) and the payoff split (phi). 
 
 1. Run the following command to run the bimatrix_tu_game.py file: 
     1. `$ python3 bimatrix_tu_game.py`
