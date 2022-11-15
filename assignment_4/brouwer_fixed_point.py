@@ -12,19 +12,23 @@ The goal of this script is to find a fixed point over a continuous range using t
     1. A linear search method
     2. A Depth First Search - based continuous range slicing method 
 
+This attempt actually turned out to be successful over the demo functions I defined in the main() function. 
+I was pleased to see, for example, that the DFS-based range splitting algorithm found the fixed point after 
+searching only 7 nodes, while the linear search needed to iterate over 132 nodes to find the solution. 
+
 This script can be run at the command line by running the following: $ python3 brower_fixed_point.py
 """
 
 # imports 
 import math
 import numpy as np
-from numpy import array, array_equal, allclose
+from numpy import array, array_equal
 
 def brouwer_linear_search(domain: range, function: str, tolerance: float):
     """
     Linear search method to find the brouwer fixed point given a range and a continuous mapping function. 
     """
-    cutoff = 10_000
+    cutoff = 100_000
     solved = False
     node_search_count = 0
     for x in domain:
@@ -33,7 +37,7 @@ def brouwer_linear_search(domain: range, function: str, tolerance: float):
         node_search_count += 1
 
         # here we add a stopping point so that we don't accidentally run through a billion iterations
-        if cutoff <= 0: 
+        if node_search_count >= cutoff: 
             break
 
         f_x = function(x)
