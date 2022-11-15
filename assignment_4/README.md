@@ -51,7 +51,9 @@ Number of nodes searched before finding a solution 134.
 ------------------------------
 ``` 
 
+Here we can see an example in which the DFS-based range splitting method only needed to search through 7 nodes to find the brouwer fixed point, but the linear search method needed to search through 134 nodes. I think one of the main factors that can be attributed to the success of DFS here is the fact that the leaf nodes for the DFS graph are themselves ranges, not indivisual values in the input range (domain) as is the linear case. We can see the result of this fact if we examine `x` and `f(x)` for the DFS case above. We see that the solution found falls just outside the tolerance - this is because `x` is calculated for the DFS graph using the mean value of the leaf range. 
 
+Future iterations of this algorithm could perform sub-searches inside of leaf nodes when a leaf is flagged as containing the Brouwer fixed point. Still, these results show the potential of a binary tree-basde range splitting algorithm for finding the fixed point over a range of values and some sample continuous functions. 
 
 
 ## How to run Question 2(c): bimatrix_tu_game.py
